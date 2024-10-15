@@ -24,7 +24,6 @@ const MapComponent = () => {
     layer.on('click', (event) => {
       console.log('Clicked on:', country.properties);
       setSelectedCountry(country.properties);
-      getCountryData(country);
     });
   };
   /**
@@ -42,31 +41,6 @@ const MapComponent = () => {
   const handleClose = () => {
     setSelectedCountry(null);
   };
-
-  /**
-   * Hakee API:n kautta valitun maan dataa
-   * @param {klikattu maa} country 
-   */
-  function getCountryData(country) {
-    
-    const apiKey = "0168eed5-2b8e-4d18-aebb-9c1e3ff8ab45"; //TODO: API-avain ympäristömuuttujaksi (?)
-    fetch('https://api.ember-climate.org/v1/electricity-generation/yearly?' + 
-      'entity_code='+ country.properties.ISO3_CODE +
-      '&is_aggregate_series=false'+
-      '&start_date=2023' +
-      '&api_key=' + apiKey)
-      .then(response => response.json())
-      .then(data => showCountryData(data))
-      .catch(error => console.error(error));
-  }
-
-  /**
-   * TODO: Käsittelee maan dataa
-   * @param {data} countryData 
-   */
-  function showCountryData(countryData) {
-    console.log(countryData)
-  }
 
   return (
     <MapContainer center={position} zoom={4} style={{ height: '100vh', width: '100%' }}>

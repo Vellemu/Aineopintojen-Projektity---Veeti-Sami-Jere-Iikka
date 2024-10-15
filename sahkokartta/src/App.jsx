@@ -1,5 +1,5 @@
 import MapComponent from './components/MapComponent'
-import './App.css'
+import './sahkokartta.css'
 
 const App = () => {
   return (

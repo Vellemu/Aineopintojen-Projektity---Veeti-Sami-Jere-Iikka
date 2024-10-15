@@ -1,0 +1,52 @@
+/* Kaikki css yhteen tiedostoon */
+
+/* MapComponentin css */
+.map-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .map {
+    height: 70vh;
+    width: 80%;
+  }
+  
+  .info-container {
+    position:absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 5px;
+    border: 1px solid #ccc;
+    background-color: white; 
+    z-index: 1000; 
+    width: 10%; 
+  }
+  
+  .info-container h2 {
+    margin-top: 0;
+  }
+  
+  .info-container ul {
+    list-style-type: none;
+    padding: 0px;
+  }
+  
+  .info-container li {
+    margin-bottom: 0px;
+  }
+
+  .close-button {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background: blue;
+    border: 1px solid black;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  /* App.jsx css */ 
