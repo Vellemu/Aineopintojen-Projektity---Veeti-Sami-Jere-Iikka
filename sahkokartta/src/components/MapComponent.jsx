@@ -1,7 +1,7 @@
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import { useState, useEffect } from 'react';
 import geoData from '../geoJson/CNTR_RG_60M_2020_4326.json';
-import './MapComponent.css';
+import '../sahkokartta.css';
 
 const countryStyle = {
   weight: 2,
@@ -26,13 +26,18 @@ const MapComponent = () => {
       setSelectedCountry(country.properties);
     });
   };
-
+  /**
+   * Päivittää valitun maan tiedot
+   */
   useEffect(() => {
     if (selectedCountry) {
       console.log('Valittu maa päivittyy:', selectedCountry);
     } 
   },  [selectedCountry]);
 
+  /**
+   * Sulkee valitun maan tiedot
+   */
   const handleClose = () => {
     setSelectedCountry(null);
   };
