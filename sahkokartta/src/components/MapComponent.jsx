@@ -1,5 +1,4 @@
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
-import { useState, useEffect } from 'react';
 import geoData from '../geoJson/CNTR_RG_60M_2020_4326.json';
 import '../sahkokartta.css';
 
@@ -13,8 +12,8 @@ const countryStyle = {
 /**
  * Näyttää React Leafletilla tehdyn kartan
  */
-const MapComponent = () => {
-  const [selectedCountry, setSelectedCountry] = useState(null);
+// eslint-disable-next-line react/prop-types
+const MapComponent = ({ setSelectedCountry }) => {
   const position = [53.00, 10.00]; // Koordinaatit johon kartta keskitetään
 
   /**
@@ -26,21 +25,6 @@ const MapComponent = () => {
       setSelectedCountry(country.properties);
       getCountryData(country.properties.ISO3_CODE);
     });
-  };
-  /**
-   * Päivittää valitun maan tiedot
-   */
-  useEffect(() => {
-    if (selectedCountry) {
-      console.log('Valittu maa päivittyy:', selectedCountry);
-    } 
-  },  [selectedCountry]);
-
-  /**
-   * Sulkee valitun maan tiedot
-   */
-  const handleClose = () => {
-    setSelectedCountry(null);
   };
 
   /**
@@ -75,21 +59,7 @@ const MapComponent = () => {
         style={countryStyle}
         onEachFeature={onEachCountry}
       />
-    {selectedCountry && (
-      <>
-        <div id="info-container" className="info-container">
-          <button className="close-button" onClick={handleClose}>X</button>
-          <h2> Information about {selectedCountry.NAME_ENGL}</h2>
-          <ul>
-            {Object.entries(selectedCountry).map(([key, value]) => (
-              <li key={key}>
-                <strong>{key}</strong>: {value}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </>
-    )}
+    
     </MapContainer>
   );
 };
