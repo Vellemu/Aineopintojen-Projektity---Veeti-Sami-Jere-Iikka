@@ -15,10 +15,27 @@ const App = () => {
     } 
   },  [selectedCountry]);
 
+  /**
+   * Hakee API:n kautta valitun maan dataa 
+   * @param {string} countryCode
+   */
+  function getCountryData(countryCode) {
+    const apiKey = import.meta.env.VITE_API_KEY; /* API-avain ympäristömuuttuja */
+
+    fetch('https://api.ember-climate.org/v1/electricity-generation/yearly?' + 
+      'entity_code='+ countryCode +
+      '&is_aggregate_series=false'+
+      '&start_date=2023' +
+      '&api_key=' + apiKey)
+      .then(response => response.json())
+      .then(data => console.log(data)) // TODO
+      .catch(error => console.error(error));
+  }
+
   return (
     <>
       <h1>Sähkökartta</h1>
-      <MapComponent setSelectedCountry={setSelectedCountry}/>
+      <MapComponent setSelectedCountry={setSelectedCountry} getCountryData={getCountryData}/>
       {selectedCountry &&
         <CountryData selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry}/>
       }
