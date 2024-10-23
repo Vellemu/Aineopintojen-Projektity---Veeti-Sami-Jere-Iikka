@@ -48,7 +48,7 @@ const MapComponent = () => {
    * @param {string} countryCode
    */
   function getCountryData(countryCode) {
-    const apiKey = "0168eed5-2b8e-4d18-aebb-9c1e3ff8ab45"; //TODO: API-avain ympäristömuuttujaksi (?)
+    const apiKey = process.env.REACT_APP_API_KEY; /* API-avain ympäristömuuttuja */
     fetch('https://api.ember-climate.org/v1/electricity-generation/yearly?' + 
       'entity_code='+ countryCode +
       '&is_aggregate_series=false'+
