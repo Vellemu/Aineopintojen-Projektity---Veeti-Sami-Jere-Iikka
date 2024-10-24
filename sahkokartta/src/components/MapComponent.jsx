@@ -1,8 +1,9 @@
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import geoData from '../geoJson/CNTR_RG_60M_2020_4326.json';
+import React, { useState } from 'react';
 import '../sahkokartta.css';
 
-const countryStyle = {
+const defaultCountryStyle = {
   weight: 2,
   color: 'lightblue',
   fillColor: 'lightblue',
@@ -14,6 +15,7 @@ const countryStyle = {
  */
 // eslint-disable-next-line react/prop-types
 const MapComponent = ({ setSelectedCountry, getCountryData }) => {
+  const [selectedCountry, setSelectedCountryState] = useState(null);
   const position = [53.00, 10.00]; // Koordinaatit johon kartta keskitetään
 
   /**
@@ -23,8 +25,16 @@ const MapComponent = ({ setSelectedCountry, getCountryData }) => {
     layer.on('click', (event) => {
       console.log('Clicked on:', country.properties);
       setSelectedCountry(country.properties);
+      setSelectedCountryState(country.properties.ISO3_CODE);
       getCountryData(country.properties.ISO3_CODE);
     });
+  };
+
+  const getCountryStyle = (country) => {
+    return {
+      ...defaultCountryStyle,
+      fillColor: country.properties.ISO3_CODE === selectedCountry ? 'blue' : 'lightblue'
+    };
   };
 
   return (
@@ -39,7 +49,7 @@ const MapComponent = ({ setSelectedCountry, getCountryData }) => {
       />
       <GeoJSON
         data={geoData}
-        style={countryStyle}
+        style={getCountryStyle}
         onEachFeature={onEachCountry}
       />
     
