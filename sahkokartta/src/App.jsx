@@ -5,6 +5,7 @@ import CountryData from './components/CountryData';
 
 const App = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);
+  const [selectedCountryData, setSelectedCountryData] = useState(null)
 
   /**
    * Päivittää valitun maan tiedot
@@ -28,7 +29,7 @@ const App = () => {
       '&start_date=2023' +
       '&api_key=' + apiKey)
       .then(response => response.json())
-      .then(data => console.log(data)) // TODO
+      .then(data => setSelectedCountryData(data)) // TODO
       .catch(error => console.error(error));
   }
 
@@ -37,7 +38,11 @@ const App = () => {
       <h1>Sähkökartta</h1>
       <MapComponent setSelectedCountry={setSelectedCountry} getCountryData={getCountryData}/>
       {selectedCountry &&
-        <CountryData selectedCountry={selectedCountry} setSelectedCountry={setSelectedCountry}/>
+        <CountryData 
+        selectedCountry={selectedCountry} 
+        setSelectedCountry={setSelectedCountry}
+        selectedCountryData={selectedCountryData}
+        />
       }
     </>
   )
