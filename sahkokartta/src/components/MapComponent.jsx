@@ -7,7 +7,7 @@ const defaultCountryStyle = {
   weight: 2,
   color: 'lightblue',
   fillColor: 'lightblue',
-  fillOpacity: 0.2
+  fillOpacity: 0.5
 }
 
 /**
@@ -33,7 +33,7 @@ const MapComponent = ({ setSelectedCountry, getCountryData }) => {
   const getCountryStyle = (country) => {
     return {
       ...defaultCountryStyle,
-      fillColor: country.properties.ISO3_CODE === selectedCountry ? 'blue' : 'lightblue'
+      fillColor: country.properties.ISO3_CODE === selectedCountry ? 'black' : 'green'
     };
   };
 
