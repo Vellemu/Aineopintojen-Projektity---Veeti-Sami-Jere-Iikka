@@ -5,7 +5,7 @@ import CountryData from './components/CountryData';
 
 const App = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);
-  const [selectedCountryData, setSelectedCountryData] = useState(null)
+  const [selectedCountryData, setSelectedCountryData] = useState([])
 
   /**
    * Päivittää valitun maan tiedot
@@ -29,7 +29,7 @@ const App = () => {
       '&start_date=2023' +
       '&api_key=' + apiKey)
       .then(response => response.json())
-      .then(data => setSelectedCountryData(data)) // TODO
+      .then(data => setSelectedCountryData(data.data))
       .catch(error => console.error(error));
   }
 
