@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 /* eslint-disable react/prop-types */
 const CountryData = ({ selectedCountry, setSelectedCountry, selectedCountryData }) => {
 
@@ -10,19 +12,22 @@ const CountryData = ({ selectedCountry, setSelectedCountry, selectedCountryData 
 
   return (
     <>
-      { selectedCountryData && <div id="info-container" className="info-container">
+      {selectedCountryData && <div id="info-container" className="info-container">
         <button className="close-button" onClick={handleClose}>X</button>
-        <h2> Information about {selectedCountry.NAME_ENGL}</h2>
+        <h2>
+          Information about {selectedCountry.NAME_ENGL}
+          <Link to={`/countries/${selectedCountry.ISO3_CODE}`}>Linkki</Link>
+        </h2>
         <ul>
-          { selectedCountryData.map(country => {
+          {selectedCountryData.map(country => {
             return (
               <li key={country.series}>
                 {country.series}
               </li>
             )
-          }) }
+          })}
         </ul>
-      </div> }
+      </div>}
     </>
   )
 }
