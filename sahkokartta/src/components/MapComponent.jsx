@@ -20,7 +20,7 @@ const MapComponent = ({ setSelectedCountry, getCountryData }) => {
    * Tekee jokaisesta maasta klikattavan  
    */
   const onEachCountry = (country, layer) => {
-    layer.on('click', (event) => {
+    layer.on('click', () => {
       console.log('Clicked on:', country.properties);
       setSelectedCountry(country.properties);
       getCountryData(country.properties.ISO3_CODE);
