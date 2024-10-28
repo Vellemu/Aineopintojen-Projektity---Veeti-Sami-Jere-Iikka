@@ -8,6 +8,16 @@ const countryStyle = {
   fillColor: 'lightblue',
   fillOpacity: 0.2
 }
+/**
+   * Tekee jokaisesta maasta klikattavan  
+   */
+const onEachCountry = (country, layer, setSelectedCountry, getCountryData) => {
+  layer.on('click', () => {
+    console.log('Clicked on:', country.properties);
+    setSelectedCountry(country.properties);
+    getCountryData(country.properties.ISO3_CODE);
+  });
+};
 
 /**
  * Näyttää React Leafletilla tehdyn kartan
@@ -15,17 +25,6 @@ const countryStyle = {
 // eslint-disable-next-line react/prop-types
 const MapComponent = ({ setSelectedCountry, getCountryData }) => {
   const position = [53.00, 10.00]; // Koordinaatit johon kartta keskitetään
-
-  /**
-   * Tekee jokaisesta maasta klikattavan  
-   */
-  const onEachCountry = (country, layer) => {
-    layer.on('click', () => {
-      console.log('Clicked on:', country.properties);
-      setSelectedCountry(country.properties);
-      getCountryData(country.properties.ISO3_CODE);
-    });
-  };
 
   return (
     <MapContainer center={position} zoom={4} style={{ height: '100vh', width: '100%' }}>
@@ -40,9 +39,9 @@ const MapComponent = ({ setSelectedCountry, getCountryData }) => {
       <GeoJSON
         data={geoData}
         style={countryStyle}
-        onEachFeature={onEachCountry}
+        onEachFeature={(country, layer) => onEachCountry(country, layer, setSelectedCountry, getCountryData)}
       />
-    
+
     </MapContainer>
   );
 };
