@@ -1,6 +1,7 @@
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import geoData from '../geoJson/CNTR_RG_60M_2020_4326.json';
 import '../sahkokartta.css';
+import { useCountry } from "../hooks/useCountry";
 
 const countryStyle = {
   weight: 2,
@@ -23,7 +24,8 @@ const onEachCountry = (country, layer, setSelectedCountry, getCountryData) => {
  * Näyttää React Leafletilla tehdyn kartan
  */
 // eslint-disable-next-line react/prop-types
-const MapComponent = ({ setSelectedCountry, getCountryData }) => {
+const MapComponent = ({ setSelectedCountry }) => {
+  const { getCountryData } = useCountry()
   const position = [53.00, 10.00]; // Koordinaatit johon kartta keskitetään
 
   return (

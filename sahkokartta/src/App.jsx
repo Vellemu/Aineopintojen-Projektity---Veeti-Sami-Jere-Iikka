@@ -5,11 +5,10 @@ import MapComponent from './components/MapComponent'
 import './sahkokartta.css'
 import CountryData from './components/CountryData';
 import Country from './components/Country';
-import { fetchCountryData } from './api';
+import { CountryDataProvider } from './CountryContext';
 
 const App = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);
-  const [selectedCountryData, setSelectedCountryData] = useState([])
 
   /**
    * Päivittää valitun maan tiedot
@@ -20,34 +19,26 @@ const App = () => {
     }
   }, [selectedCountry]);
 
-  const getCountryData = async (countryCode) => {
-    try {
-      const data = await fetchCountryData(countryCode)
-      setSelectedCountryData(data)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
   return (
-    <Router>
-      <h1>Sähkökartta</h1>
-      <Routes>
-        <Route path='/' element={
-          <>
-          <MapComponent setSelectedCountry={setSelectedCountry} getCountryData={getCountryData} />
-          {selectedCountry &&
-            <CountryData
-              selectedCountry={selectedCountry}
-              setSelectedCountry={setSelectedCountry}
-              selectedCountryData={selectedCountryData}
-            />
-          }
-          </>
-        }/>
-        <Route path='/countries/:countryCode' element={<Country />}/>
-      </Routes>
-    </Router>
+    <CountryDataProvider>
+      <Router>
+        <h1>Sähkökartta</h1>
+        <Routes>
+          <Route path='/' element={
+            <>
+              <MapComponent setSelectedCountry={setSelectedCountry} />
+              {selectedCountry &&
+                <CountryData
+                  selectedCountry={selectedCountry}
+                  setSelectedCountry={setSelectedCountry}
+                />
+              }
+            </>
+          } />
+          <Route path='/countries/:countryCode' element={<Country />} />
+        </Routes>
+      </Router>
+    </CountryDataProvider>
   )
 }
 

@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
+import { useCountry } from "../hooks/useCountry";
 
 /* eslint-disable react/prop-types */
-const CountryData = ({ selectedCountry, setSelectedCountry, selectedCountryData }) => {
-
+const CountryData = ({ selectedCountry, setSelectedCountry }) => {
+  const { countryElectricityGeneration } = useCountry()
   /**
    * Sulkee valitun maan tiedot
    */
@@ -12,14 +13,14 @@ const CountryData = ({ selectedCountry, setSelectedCountry, selectedCountryData 
 
   return (
     <>
-      {selectedCountryData && <div id="info-container" className="info-container">
+      {countryElectricityGeneration && <div id="info-container" className="info-container">
         <button className="close-button" onClick={handleClose}>X</button>
         <h2>
           Information about {selectedCountry.NAME_ENGL}
           <Link to={`/countries/${selectedCountry.ISO3_CODE}`}>Linkki</Link>
         </h2>
         <ul>
-          {selectedCountryData.map(country => {
+          {countryElectricityGeneration.map(country => {
             return (
               <li key={country.series}>
                 {country.series}
