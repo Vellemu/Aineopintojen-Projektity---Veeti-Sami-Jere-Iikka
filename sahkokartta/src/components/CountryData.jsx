@@ -16,11 +16,11 @@ import { useEffect } from "react";
   }, [selectedCountry])
 
 // Kokonaistuotanto TODO: net import pois?
-const totalGeneration = selectedCountryData
-? selectedCountryData.reduce((total, country) => total + (country.generation_twh || 0), 0)
+const totalGeneration = countryElectricityGeneration
+? countryElectricityGeneration.reduce((total, country) => total + (country.generation_twh || 0), 0)
 : 0;
 
-const netImportData = selectedCountryData.find(
+const netImportData = countryElectricityGeneration.find(
   (data) => data.series === "Net imports"
 );
 const netImport = netImportData ? netImportData.generation_twh : 0;
@@ -28,19 +28,19 @@ const netImport = netImportData ? netImportData.generation_twh : 0;
 const adjustedTotalGeneration = totalGeneration - netImport;
 
 // uusiutuvat energialähteet
-const bioenergyData = selectedCountryData.find(
+const bioenergyData = countryElectricityGeneration.find(
   (data) => data.series === "Bioenergy"
 );
-const solarData = selectedCountryData.find(
+const solarData = countryElectricityGeneration.find(
   (data) => data.series === "Solar"
 );
-const hydroData = selectedCountryData.find(
+const hydroData = countryElectricityGeneration.find(
   (data) => data.series === "Hydro"
 );
-const windData = selectedCountryData.find(
+const windData = countryElectricityGeneration.find(
   (data) => data.series === "Wind"
 );
-const OtherData = selectedCountryData.find(
+const OtherData = countryElectricityGeneration.find(
   (data) => data.series === "Other renewables"
 );
 
