@@ -1,7 +1,7 @@
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import geoData from '../geoJson/CNTR_RG_60M_2020_4326.json';
-import React, { useState } from 'react';
 import '../sahkokartta.css';
+import { useCountry } from "../hooks/useCountry";
 
 const defaultCountryStyle = {
   weight: 2,
@@ -9,31 +9,28 @@ const defaultCountryStyle = {
   fillColor: 'lightblue',
   fillOpacity: 0.5
 }
-
 /**
- * Näyttää React Leafletilla tehdyn kartan
- */
-// eslint-disable-next-line react/prop-types
-const MapComponent = ({ setSelectedCountry, getCountryData }) => {
-  const [selectedCountry, setSelectedCountryState] = useState(null);
+* Tekee jokaisesta maasta klikattavan  
+*/
+const onEachCountry = (country, layer, setSelectedCountry, getCountryData) => {
+  layer.on('click', () => {
+    console.log('Clicked on:', country.properties);
+    setSelectedCountry(country.properties);
+    getCountryData(country.properties.ISO3_CODE);
+  });
+};
+
+const MapComponent = () => {
+  const { getCountryData, selectedCountry, setSelectedCountry } = useCountry()
   const position = [53.00, 10.00]; // Koordinaatit johon kartta keskitetään
 
-  /**
-   * Tekee jokaisesta maasta klikattavan  
-   */
-  const onEachCountry = (country, layer) => {
-    layer.on('click', () => {
-      console.log('Clicked on:', country.properties);
-      setSelectedCountry(country.properties);
-      setSelectedCountryState(country.properties.ISO3_CODE);
-      getCountryData(country.properties.ISO3_CODE);
-    });
-  };
-
   const getCountryStyle = (country) => {
+    if (!selectedCountry) {
+      return defaultCountryStyle
+    }
     return {
       ...defaultCountryStyle,
-      fillColor: country.properties.ISO3_CODE === selectedCountry ? 'black' : 'green'
+      fillColor: country.properties.ISO3_CODE === selectedCountry.ISO3_CODE ? 'black' : 'green'
     };
   };
 
@@ -50,9 +47,9 @@ const MapComponent = ({ setSelectedCountry, getCountryData }) => {
       <GeoJSON
         data={geoData}
         style={getCountryStyle}
-        onEachFeature={onEachCountry}
+        onEachFeature={(country, layer) => onEachCountry(country, layer, setSelectedCountry, getCountryData)}
       />
-    
+
     </MapContainer>
   );
 };
