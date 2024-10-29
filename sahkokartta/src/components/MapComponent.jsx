@@ -23,11 +23,9 @@ const onEachCountry = (country, layer, setSelectedCountry, getCountryData) => {
 /**
  * Näyttää React Leafletilla tehdyn kartan
  */
-// eslint-disable-next-line react/prop-types
-const MapComponent = ({ setSelectedCountry }) => {
-  const { getCountryData } = useCountry()
+const MapComponent = () => {
+  const { getCountryData, setSelectedCountry } = useCountry()
   const position = [53.00, 10.00]; // Koordinaatit johon kartta keskitetään
-
   return (
     <MapContainer center={position} zoom={4} style={{ height: '100vh', width: '100%' }}>
       <TileLayer

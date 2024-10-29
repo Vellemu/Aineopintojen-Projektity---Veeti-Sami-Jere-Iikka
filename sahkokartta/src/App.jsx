@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import MapComponent from './components/MapComponent'
 import './sahkokartta.css'
 import CountryData from './components/CountryData';
 import Country from './components/Country';
-import { CountryDataProvider } from './CountryContext';
+import { useCountry } from './hooks/useCountry';
 
 const App = () => {
-  const [selectedCountry, setSelectedCountry] = useState(null);
+  const { selectedCountry } = useCountry()
 
   /**
    * Päivittää valitun maan tiedot
@@ -20,25 +20,20 @@ const App = () => {
   }, [selectedCountry]);
 
   return (
-    <CountryDataProvider>
-      <Router>
-        <h1>Sähkökartta</h1>
-        <Routes>
-          <Route path='/' element={
-            <>
-              <MapComponent setSelectedCountry={setSelectedCountry} />
-              {selectedCountry &&
-                <CountryData
-                  selectedCountry={selectedCountry}
-                  setSelectedCountry={setSelectedCountry}
-                />
-              }
-            </>
-          } />
-          <Route path='/countries/:countryCode' element={<Country />} />
-        </Routes>
-      </Router>
-    </CountryDataProvider>
+    <Router>
+      <h1>Sähkökartta</h1>
+      <Routes>
+        <Route path='/' element={
+          <>
+            <MapComponent />
+            {selectedCountry &&
+              <CountryData />
+            }
+          </>
+        } />
+        <Route path='/countries/:countryCode' element={<Country />} />
+      </Routes>
+    </Router>
   )
 }
 

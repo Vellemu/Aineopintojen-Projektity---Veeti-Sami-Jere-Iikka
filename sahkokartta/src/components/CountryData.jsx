@@ -1,15 +1,19 @@
 import { Link } from "react-router-dom";
 import { useCountry } from "../hooks/useCountry";
+import { useEffect } from "react";
 
-/* eslint-disable react/prop-types */
-const CountryData = ({ selectedCountry, setSelectedCountry }) => {
-  const { countryElectricityGeneration } = useCountry()
+const CountryData = () => {
+  const { countryElectricityGeneration, selectedCountry, setSelectedCountry } = useCountry()
   /**
    * Sulkee valitun maan tiedot
    */
   const handleClose = () => {
     setSelectedCountry(null);
   };
+
+  useEffect(() => {
+    console.log(selectedCountry)
+  }, [selectedCountry])
 
   return (
     <>
