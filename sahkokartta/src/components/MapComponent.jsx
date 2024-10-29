@@ -1,30 +1,37 @@
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import geoData from '../geoJson/CNTR_RG_60M_2020_4326.json';
 import '../sahkokartta.css';
+import { useCountry } from "../hooks/useCountry";
 
-const countryStyle = {
+const defaultCountryStyle = {
   weight: 2,
   color: 'lightblue',
   fillColor: 'lightblue',
-  fillOpacity: 0.2
+  fillOpacity: 0.5
 }
-
 /**
- * Näyttää React Leafletilla tehdyn kartan
- */
-// eslint-disable-next-line react/prop-types
-const MapComponent = ({ setSelectedCountry, getCountryData }) => {
+* Tekee jokaisesta maasta klikattavan  
+*/
+const onEachCountry = (country, layer, setSelectedCountry, getCountryData) => {
+  layer.on('click', () => {
+    console.log('Clicked on:', country.properties);
+    setSelectedCountry(country.properties);
+    getCountryData(country.properties.ISO3_CODE);
+  });
+};
+
+const MapComponent = () => {
+  const { getCountryData, selectedCountry, setSelectedCountry } = useCountry()
   const position = [53.00, 10.00]; // Koordinaatit johon kartta keskitetään
 
-  /**
-   * Tekee jokaisesta maasta klikattavan  
-   */
-  const onEachCountry = (country, layer) => {
-    layer.on('click', () => {
-      console.log('Clicked on:', country.properties);
-      setSelectedCountry(country.properties);
-      getCountryData(country.properties.ISO3_CODE);
-    });
+  const getCountryStyle = (country) => {
+    if (!selectedCountry) {
+      return defaultCountryStyle
+    }
+    return {
+      ...defaultCountryStyle,
+      fillColor: country.properties.ISO3_CODE === selectedCountry.ISO3_CODE ? 'black' : 'green'
+    };
   };
 
   return (
@@ -39,10 +46,10 @@ const MapComponent = ({ setSelectedCountry, getCountryData }) => {
       />
       <GeoJSON
         data={geoData}
-        style={countryStyle}
-        onEachFeature={onEachCountry}
+        style={getCountryStyle}
+        onEachFeature={(country, layer) => onEachCountry(country, layer, setSelectedCountry, getCountryData)}
       />
-    
+
     </MapContainer>
   );
 };
