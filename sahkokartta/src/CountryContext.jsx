@@ -2,6 +2,7 @@ import { createContext, useState } from 'react';
 import { fetchCountryElectricityData, fetchEmissionsData } from './api';
 
 export const CountryContext = createContext({
+  selectedMap: 'energyTrade',
   selectedCountry: null,
   emissionsData: []
 })
@@ -12,9 +13,21 @@ export const CountryDataProvider = ({ children }) => {
   const [countryElectricityGeneration, setCountryElectricityGeneration] = useState([])
   const [carbonIntensity, setCarbonIntensity] = useState([])
   const [selectedCountry, setCountry] = useState(null)
+  const [selectedMap, setSelectedMap] = useState('energyTrade')
 
   const setSelectedCountry = (country) => {
     setCountry(country)
+  }
+
+  const toggleMap = () => {
+    console.log(selectedMap)
+    if (selectedMap === 'energyTrade') {
+      console.log('setting map to emissions')
+      setSelectedMap('emissions')
+    } else {
+      console.log('setting map to trade')
+      setSelectedMap('energyTrade')
+    }
   }
 
   const getCarbonIntensityData = async () => {
@@ -45,7 +58,9 @@ export const CountryDataProvider = ({ children }) => {
         selectedCountry,
         setSelectedCountry,
         getCarbonIntensityData,
-        carbonIntensity
+        carbonIntensity,
+        toggleMap,
+        selectedMap
       }}>
       {children}
     </CountryContext.Provider>

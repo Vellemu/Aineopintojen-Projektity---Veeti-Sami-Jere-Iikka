@@ -10,10 +10,29 @@ const defaultCountryStyle = {
   fillOpacity: 1
 }
 
+const onEachCountry = (country, layer, setSelectedCountry, getCountryData) => {
+  layer.on('click', () => {
+    console.log('Clicked on:', country.properties);
+    setSelectedCountry(country.properties);
+    getCountryData(country.properties.ISO3_CODE);
+  });
+};
+
 const EmissionsMap = () => {
-  const { getCarbonIntensityData, carbonIntensity } = useCountry()
+  const { 
+    getCarbonIntensityData,
+    carbonIntensity,
+    getCountryData,
+    setSelectedCountry,
+  } = useCountry()
+
   const position = [53.00, 10.00]; // Koordinaatit johon kartta keskitetään
 
+  /**
+   * Valitsee värin päästöintensiteetin perusteella
+   * @param {*} country 
+   * @returns Värin hex-koodi
+   */
   const getColor = (country) => {
     const countryData = carbonIntensity.find((a) => a.entity_code === country.properties.ISO3_CODE)
 
@@ -53,6 +72,7 @@ const EmissionsMap = () => {
         <GeoJSON
           data={geoData}
           style={getCountryStyle}
+          onEachFeature={(country, layer) => onEachCountry(country, layer, setSelectedCountry, getCountryData)}
         />
       </MapContainer>
     </div>
