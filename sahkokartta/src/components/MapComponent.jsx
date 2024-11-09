@@ -5,8 +5,8 @@ import { useCountry } from "../hooks/useCountry";
 
 const defaultCountryStyle = {
   weight: 2,
-  color: 'green',
-  fillColor: 'green',
+  color: 'lightblue',
+  fillColor: 'lightblue',
   fillOpacity: 0.5
 }
 /**

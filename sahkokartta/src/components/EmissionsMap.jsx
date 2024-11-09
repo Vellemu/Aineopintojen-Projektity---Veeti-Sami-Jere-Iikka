@@ -1,60 +1,46 @@
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import geoData from '../geoJson/CNTR_RG_60M_2020_4326.json';
 import '../sahkokartta.css';
-import { useEffect } from 'react';
+//import { useEffect } from 'react';
 import { useCountry } from '../hooks/useCountry';
 
 const defaultCountryStyle = {
   weight: 2,
-  color: 'green',
-  fillColor: 'green',
-  fillOpacity: 0.5
+  color: 'black',
+  fillOpacity: 1
 }
 
-let emissions = []
-
 const EmissionsMap = () => {
-  const { getEmissionsData, emissionsData } = useCountry()
+  const { getCarbonIntensityData, carbonIntensity } = useCountry()
   const position = [53.00, 10.00]; // Koordinaatit johon kartta keskitetään
 
-  useEffect(() => {
-    emissions = emissionsData.map((object) => {
-      return (
-        {
-          country: object.entity_code,
-          emissions: object.emissions_mtco2
-        }
-      )
-    })
-  }, [emissionsData])
+  const getColor = (country) => {
+    const countryData = carbonIntensity.find((a) => a.entity_code === country.properties.ISO3_CODE)
 
-  //const getColor = (country) => {
-    //console.log(country)
-    //const x = emissions.find((a) => a.country === country.properties.CNTR_ID)
-
-    //console.log(x)
-  //}
-
-  /*
-const getCountryStyle = (country) => {
-    if (!selectedCountry) {
-      return defaultCountryStyle
+    if (!countryData) {
+      return "gray"
     }
-    return {
-      ...defaultCountryStyle,
-      fillColor: country.properties.ISO3_CODE === selectedCountry.ISO3_CODE ? 'black' : 'green'
-    };
-  };
-  */
+
+    const emissionsIntensity = countryData.emissions_intensity_gco2_per_kwh
+
+    const color =
+      emissionsIntensity > 500 ? '#B71C1C' :
+        emissionsIntensity > 200 ? '#FC4E2A' :
+          emissionsIntensity > 100 ? '#FD8D3C' :
+            emissionsIntensity > 50 ? '#FEB24C' :
+              '#FFEDA0'
+
+    return color
+
+  }
 
   const getCountryStyle = (country) => {
-    //getColor(country)
-    return defaultCountryStyle
+    return { ...defaultCountryStyle, fillColor: getColor(country) }
   };
 
   return (
     <div>
-      <button onClick={() => getEmissionsData()}>hae Data</button>
+      <button onClick={() => getCarbonIntensityData()}>hae Data</button>
       <MapContainer center={position} zoom={4} style={{ height: '100vh', width: '100%' }}>
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png"
@@ -69,7 +55,6 @@ const getCountryStyle = (country) => {
           style={getCountryStyle}
         />
       </MapContainer>
-      {console.log(emissions)}
     </div>
   );
 };

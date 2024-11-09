@@ -2,25 +2,26 @@ import { createContext, useState } from 'react';
 import { fetchCountryElectricityData, fetchEmissionsData } from './api';
 
 export const CountryContext = createContext({
-  selectedCountry: null
+  selectedCountry: null,
+  emissionsData: []
 })
 export const CountryDispatchContext = createContext(null)
 
 // eslint-disable-next-line react/prop-types
 export const CountryDataProvider = ({ children }) => {
   const [countryElectricityGeneration, setCountryElectricityGeneration] = useState([])
-  const [emissionsData, setEmissionsData] = useState([])
+  const [carbonIntensity, setCarbonIntensity] = useState([])
   const [selectedCountry, setCountry] = useState(null)
 
   const setSelectedCountry = (country) => {
     setCountry(country)
   }
 
-  const getEmissionsData = async () => {
+  const getCarbonIntensityData = async () => {
     try {
       const data = await fetchEmissionsData()
       console.log(data)
-      setEmissionsData(data)
+      setCarbonIntensity(data)
     } catch (error) {
       console.error(error)
     }
@@ -43,8 +44,8 @@ export const CountryDataProvider = ({ children }) => {
         countryElectricityGeneration,
         selectedCountry,
         setSelectedCountry,
-        getEmissionsData,
-        emissionsData
+        getCarbonIntensityData,
+        carbonIntensity
       }}>
       {children}
     </CountryContext.Provider>
