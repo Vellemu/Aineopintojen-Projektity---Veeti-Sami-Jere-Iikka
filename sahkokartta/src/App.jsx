@@ -10,7 +10,7 @@ import EmissionsMap from './components/EmissionsMap';
 import './sahkokartta.css'
 
 const App = () => {
-  const { selectedCountry, toggleMap, selectedMap } = useCountry()
+  const { selectedCountry, toggleMap, selectedMap, getCarbonIntensityData } = useCountry()
 
   /**
    * Päivittää valitun maan tiedot
@@ -21,10 +21,15 @@ const App = () => {
     }
   }, [selectedCountry]);
 
+  const changeMap = () => {
+    toggleMap()
+    getCarbonIntensityData()
+  }
+
   return (
     <Router>
       <h1>Sähkökartta</h1>
-      <button onClick={toggleMap}>change map</button>
+      <button onClick={changeMap}>change map</button>
       <Routes>
         <Route path='/' element={
           <>

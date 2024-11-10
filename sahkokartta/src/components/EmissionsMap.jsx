@@ -1,8 +1,12 @@
-import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
+import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet';
 import geoData from '../geoJson/CNTR_RG_60M_2020_4326.json';
 import '../sahkokartta.css';
 //import { useEffect } from 'react';
 import { useCountry } from '../hooks/useCountry';
+import { useEffect } from 'react';
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
+import '../emissionsMap.css'
 
 const defaultCountryStyle = {
   weight: 2,
@@ -18,9 +22,49 @@ const onEachCountry = (country, layer, setSelectedCountry, getCountryData) => {
   });
 };
 
+const Legend = () => {
+  const map = useMap()
+
+  useEffect(() => {
+    const legend = L.control({ position: 'bottomleft' })
+
+    legend.onAdd = () => {
+      const div = L.DomUtil.create('div', 'info legend'),
+        grades = [0, 50, 100, 200, 500]
+
+      grades.forEach((grade, i) => {
+        const colorBox = L.DomUtil.create('i', 'colorBox', div)
+        const g = grade + 1
+        colorBox.style.backgroundColor =
+          g > 500 ? '#B71C1C' :
+            g > 200 ? '#FC4E2A' :
+              g > 100 ? '#FD8D3C' :
+                g > 50 ? '#FEB24C' :
+                  '#FFEDA0'
+
+        const text = document.createTextNode(
+          `${grade}${grades[i + 1] ? ` - ${grades[i + 1]}` : '+'}`
+        )
+
+        div.appendChild(colorBox)
+        div.appendChild(text)
+
+        if (i < grades.length - 1) {
+          div.appendChild(document.createElement('br'))
+        }
+      })
+
+      return div
+    }
+
+    legend.addTo(map)
+
+    return () => legend.remove()
+  }, [map])
+}
+
 const EmissionsMap = () => {
-  const { 
-    getCarbonIntensityData,
+  const {
     carbonIntensity,
     getCountryData,
     setSelectedCountry,
@@ -59,7 +103,6 @@ const EmissionsMap = () => {
 
   return (
     <div>
-      <button onClick={() => getCarbonIntensityData()}>hae Data</button>
       <MapContainer center={position} zoom={4} style={{ height: '100vh', width: '100%' }}>
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png"
@@ -74,6 +117,7 @@ const EmissionsMap = () => {
           style={getCountryStyle}
           onEachFeature={(country, layer) => onEachCountry(country, layer, setSelectedCountry, getCountryData)}
         />
+        <Legend />
       </MapContainer>
     </div>
   );
