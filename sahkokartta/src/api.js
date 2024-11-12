@@ -18,4 +18,18 @@ const fetchCountryElectricityData = async (countryCode) => {
   return jsonData.data
 }
 
+const fetchMonthlyDataByYear = async (countryCode, year) => {
+  const apiKey = import.meta.env.VITE_API_KEY; /* API-avain ympäristömuuttuja */
+  const response = await fetch('https://api.ember-climate.org/v1/electricity-generation/monthly?' +
+    'entity_code=' + countryCode +
+    '&is_aggregate_series=false' +
+    '&start_date=' + year  +
+    '&end_date=' + (year + 1)  +
+    '&api_key=' + apiKey)
+
+  const jsonData = await response.json()
+  return jsonData.data
+}
+
 export { fetchCountryElectricityData }
+export { fetchMonthlyDataByYear }
