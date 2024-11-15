@@ -12,6 +12,44 @@ const PercentAreaChart = ({countryCode}) => {
   const [chartData, setChartData] = useState(null);
   const [sliderValue, setSliderValue] = useState(2023);
   const monthlyDataYears = [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
+  const generationMethods = [
+    {
+      name: "Bioenergy",
+      color: "#00ff00",
+    },
+    {
+      name: "Coal",
+      color: "#000000"
+    },
+    {
+      name: "Gas",
+      color: "#ff00ff",
+    },
+    {
+      name: "Hydro",
+      color: "#00d4ff",
+    },
+    {
+      name: "Nuclear",
+      color: "#cccc00",
+    },
+    {
+      name: "Other fossil",
+      color: "#808080",
+    },
+    {
+      name: "Other renewables",
+      color: "#a020f0",
+    },
+    {
+      name: "Solar",
+      color: "#ff0000",
+    },
+    {
+      name: "Wind",
+      color: "#ffffff",
+    }
+  ];
 
   useEffect(() => {
     /**
@@ -92,7 +130,7 @@ const PercentAreaChart = ({countryCode}) => {
     </div>
   );
   };
-    
+
   return (
     <>
     <div className='areachart-container'>
@@ -100,25 +138,18 @@ const PercentAreaChart = ({countryCode}) => {
       <AreaChart width={800} height={400} className='areachart'
           data={chartData}
           stackOffset='expand'
-          margin={{
-          top: 10,
-          right: 30,
-          left: 30,
-          bottom: 0,}}
       >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="month" />
-          <YAxis tickFormatter={(decimal) => `${decimal * 100}%`} />
-          <Tooltip content={renderTooltipContent} />
-          <Area type="monotone" dataKey="Bioenergy" stackId="1" stroke="#00ff00" fill="#00ff00" />
-          <Area type="monotone" dataKey="Coal" stackId="1" stroke="#000000" fill="#000000" />
-          <Area type="monotone" dataKey="Gas" stackId="1" stroke="#ff00ff" fill="#ff00ff" />
-          <Area type="monotone" dataKey="Hydro" stackId="1" stroke="#00d4ff" fill="#00d4ff" />
-          <Area type="monotone" dataKey="Nuclear" stackId="1" stroke="#cccc00" fill="#dddd00" />
-          <Area type="monotone" dataKey="Other fossil" stackId="1" stroke="#808080" fill="#808080" />
-          <Area type="monotone" dataKey="Other renewables" stackId="1" stroke="#a020f0" fill="#a020f0" />
-          <Area type="monotone" dataKey="Solar" stackId="1" stroke="#ff0000" fill="#ff0000" />
-          <Area type="monotone" dataKey="Wind" stackId="1" stroke="#ffffff" fill="#eeeeee" />
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="month" />
+        <YAxis tickFormatter={(decimal) => `${decimal * 100}%`} />
+        <Tooltip content={renderTooltipContent} />
+        {generationMethods.map((method) => <Area 
+          key={method.name} 
+          type="monotone"
+          dataKey={method.name} 
+          stackId="1" 
+          stroke={method.color} 
+          fill={method.color} />)}
       </AreaChart>}
         <Slider className='slider'
           step={null}
@@ -126,9 +157,15 @@ const PercentAreaChart = ({countryCode}) => {
           defaultValue={2023}
           min={2017}
           max={2024}
-          valueLabelDisplay="on"
+          valueLabelDisplay="auto"
           onChange={setYear}    
         />  
+        <ul className='methodlist'>
+          {generationMethods.map((method) => <li 
+            key={method.name} 
+            style={{color: method.color}}
+            >{method.name}</li>)}
+        </ul>
     </div>
     </>    
   )  
