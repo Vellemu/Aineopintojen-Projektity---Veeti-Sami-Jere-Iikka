@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
-import { fetchMonthlyDataByYear } from '../api';
+import { fetchChartData } from '../api';
 import { useState, useEffect } from 'react';
 import { Slider } from '@mui/material';
 
@@ -10,7 +10,8 @@ import { Slider } from '@mui/material';
  */
 const PercentAreaChart = ({countryCode}) => {
   const [chartData, setChartData] = useState(null);
-  const [sliderValue, setSliderValue] = useState(2023);
+  const [sliderValue, setSliderValue] = useState(2017);
+  const [activeButton, setActiveButton] = useState("monthly");
   const monthlyDataYears = [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
   const generationMethods = [
     {
@@ -47,7 +48,7 @@ const PercentAreaChart = ({countryCode}) => {
     },
     {
       name: "Wind",
-      color: "#ffffff",
+      color: "#ccccff",
     }
   ];
 
@@ -58,10 +59,22 @@ const PercentAreaChart = ({countryCode}) => {
      * TODO: järkevämpi/siistimpi totetus for-silmukkujen sijaan
      */
     const getMonthlyData = async () => { 
-      const promise = fetchMonthlyDataByYear(countryCode, sliderValue); 
+      const promise = fetchChartData(countryCode, activeButton, sliderValue); 
       const data = await promise;
       /* console.log(data); */
-      var areachartData = [{month: "jan"}, {month: "feb"}, {month: "mar"}, {month: "apr"}, {month: "may"}, {month: "jun"}, {month: "jul"}, {month: "aug"}, {month: "sep"}, {month: "oct"}, {month: "nov"}, {month: "dec"}]
+      var areachartData = [];
+      if(activeButton === "monthly") { 
+        areachartData = [{period: "jan"}, {period: "feb"}, {period: "mar"}, {period: "apr"}, {period: "may"}, {period: "jun"}, {period: "jul"}, {period: "aug"}, {period: "sep"}, {period: "oct"}, {period: "nov"}, {period: "dec"}]
+      }
+      else {
+        var startYear = 2000;
+        var currentYear = 2024;
+        var years = [];
+        while (startYear < currentYear) {
+          years.push({period: startYear++});
+        }
+        areachartData = years;
+      }
       for (var m = 0, i = 0; data[i] != null && m < areachartData.length; m++) {
         for(; ; i++) {
           Object.defineProperty(areachartData[m], data[i].series, {value: data[i].generation_twh});
@@ -71,11 +84,11 @@ const PercentAreaChart = ({countryCode}) => {
           }
         }
       }
-      /* console.log(areachartData); */
+      console.log(areachartData);
       setChartData(areachartData);
     }
     getMonthlyData();
-  },[countryCode, sliderValue]);
+  },[countryCode, sliderValue, activeButton]);
  
   const setYear = (e, year) => {
     setSliderValue(year);
@@ -110,6 +123,7 @@ const PercentAreaChart = ({countryCode}) => {
       case "nov": return "November"
       case "dec": return "December"
     }
+    return month;
   }
 
   const getPercent = (value, total) => {
@@ -128,7 +142,42 @@ const PercentAreaChart = ({countryCode}) => {
         ))}
       </ul>
     </div>
-  );
+  )
+  };
+
+  const RadioButtons = ({activeButton, setActiveButton}) => {
+    
+    const handleYearly = () => {
+      setActiveButton("yearly");
+    };
+
+    const handleMonthly = () => {
+      setActiveButton("monthly");
+    };
+
+    const RadioButton = ({label, value, onChange}) => {
+      return(
+        <label>
+          <input type="radio" checked={value} onChange={onChange} />
+          {label}
+        </label>
+      )
+    };
+    
+    return (
+      <>
+        <RadioButton 
+          label="Yearly"
+          value={activeButton === "yearly"}
+          onChange={handleYearly}
+        />
+        <RadioButton 
+          label="Monthly"
+          value={activeButton === "monthly"}
+          onChange={handleMonthly}
+        />
+      </>
+   )
   };
 
   return (
@@ -140,7 +189,7 @@ const PercentAreaChart = ({countryCode}) => {
           stackOffset='expand'
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="month" />
+        <XAxis dataKey="period" />
         <YAxis tickFormatter={(decimal) => `${decimal * 100}%`} />
         <Tooltip content={renderTooltipContent} />
         {generationMethods.map((method) => <Area 
@@ -151,21 +200,22 @@ const PercentAreaChart = ({countryCode}) => {
           stroke={method.color} 
           fill={method.color} />)}
       </AreaChart>}
-        <Slider className='slider'
+        {activeButton === "monthly" && <Slider className='slider'
           step={null}
           marks={marks(monthlyDataYears)}
-          defaultValue={2023}
+          defaultValue={2017}
           min={2017}
           max={2024}
           valueLabelDisplay="auto"
           onChange={setYear}    
-        />  
+        />}  
         <ul className='methodlist'>
           {generationMethods.map((method) => <li 
             key={method.name} 
             style={{color: method.color}}
             >{method.name}</li>)}
         </ul>
+        <RadioButtons className='radiobuttons' activeButton={activeButton} setActiveButton={setActiveButton}/>
     </div>
     </>    
   )  
