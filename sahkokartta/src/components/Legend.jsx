@@ -13,8 +13,12 @@ const Legend = () => {
     const legend = L.control({ position: 'bottomleft' })
 
     legend.onAdd = () => {
-      const div = L.DomUtil.create('div', 'info legend'),
-        grades = [0, 50, 100, 200, 500]
+      const div = L.DomUtil.create('div', 'info legend')
+      const grades = [0, 50, 100, 200, 500]
+
+      const x = L.DomUtil.create('p', 'yksikko')
+      x.textContent = '(gco2/kwh)'
+      div.appendChild(x)
 
       grades.forEach((grade, i) => {
         const colorBox = L.DomUtil.create('i', 'colorBox', div)

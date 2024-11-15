@@ -6,6 +6,7 @@ import Legend from './Legend';
 
 import '../sahkokartta.css';
 import '../emissionsMap.css';
+import Layers from './Layers';
 
 const defaultCountryStyle = {
   weight: 2,
@@ -14,12 +15,28 @@ const defaultCountryStyle = {
 }
 
 const onEachCountry = (country, layer, setSelectedCountry, getCountryData) => {
+
+  layer.bindTooltip((layer) => {
+    return country.properties.ISO3_CODE
+  }, { sticky: true }
+)
+
   layer.on('click', () => {
     console.log(layer)
     console.log('Clicked on:', country.properties);
     setSelectedCountry(country.properties);
     getCountryData(country.properties.ISO3_CODE);
   });
+
+
+  layer.on('mouseover', (e) => {
+    e.target.setStyle({ fillOpacity: 1 })
+
+  })
+
+  layer.on('mouseout', (e) => {
+    e.target.setStyle({ fillOpacity: 0.8 })
+  })
 };
 
 const EmissionsMap = () => {
@@ -71,6 +88,7 @@ const EmissionsMap = () => {
           onEachFeature={(country, layer) => onEachCountry(country, layer, setSelectedCountry, getCountryData)}
         />
         <Legend />
+        <Layers />
       </MapContainer>
     </div>
   );
