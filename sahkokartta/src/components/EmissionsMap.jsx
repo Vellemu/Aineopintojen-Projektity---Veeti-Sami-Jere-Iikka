@@ -7,6 +7,7 @@ import Legend from './Legend';
 import '../sahkokartta.css';
 import '../emissionsMap.css';
 import Layers from './Layers';
+import { useEffect, useState } from 'react';
 
 const defaultCountryStyle = {
   weight: 2,
@@ -14,15 +15,25 @@ const defaultCountryStyle = {
   fillOpacity: 0.8
 }
 
-const onEachCountry = (country, layer, setSelectedCountry, getCountryData) => {
+const onEachCountry = (country, layer, setSelectedCountry, getCountryData, carbonIntensity) => {
 
-  layer.bindTooltip((layer) => {
-    return country.properties.ISO3_CODE
-  }, { sticky: true }
-)
+  layer.bindTooltip(() => {
+    const countryCarbonIntensity = carbonIntensity.find(data => data.entity_code === country.properties.ISO3_CODE)
+
+    if (!countryCarbonIntensity) {
+      return 'No data'
+    }
+
+    return `
+    <div>
+    <span class="entity">${countryCarbonIntensity.entity}</span>
+    <br />
+    ${countryCarbonIntensity.emissions_intensity_gco2_per_kwh} <abbr>gco2/kwh</abbr> 
+    </div>`
+  }, { sticky: true, className: 'emissions-tooltip' }
+  )
 
   layer.on('click', () => {
-    console.log(layer)
     console.log('Clicked on:', country.properties);
     setSelectedCountry(country.properties);
     getCountryData(country.properties.ISO3_CODE);
@@ -31,7 +42,6 @@ const onEachCountry = (country, layer, setSelectedCountry, getCountryData) => {
 
   layer.on('mouseover', (e) => {
     e.target.setStyle({ fillOpacity: 1 })
-
   })
 
   layer.on('mouseout', (e) => {
@@ -40,6 +50,7 @@ const onEachCountry = (country, layer, setSelectedCountry, getCountryData) => {
 };
 
 const EmissionsMap = () => {
+  const [loading, setLoading] = useState(true)
   const {
     carbonIntensity,
     getCountryData,
@@ -47,6 +58,13 @@ const EmissionsMap = () => {
   } = useCountry()
 
   const position = [53.00, 10.00]; // Koordinaatit johon kartta keskitetään
+
+  useEffect(() => {
+    setLoading(true)
+    if (carbonIntensity && carbonIntensity.length > 0) {
+      setLoading(false)
+    }
+  }, [carbonIntensity])
 
   /**
    * Valitsee värin päästöintensiteetin perusteella
@@ -71,6 +89,7 @@ const EmissionsMap = () => {
     return { ...defaultCountryStyle, fillColor: getColor(country) }
   };
 
+  // TODO: Loading animaatio
   return (
     <div>
       <MapContainer center={position} zoom={4} style={{ height: '100vh', width: '100%' }}>
@@ -82,11 +101,20 @@ const EmissionsMap = () => {
           url="https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png"
           attribution='©OpenStreetMap, ©CartoDB'
         />
-        <GeoJSON
+        {!loading && <GeoJSON
           data={geoData}
           style={getCountryStyle}
-          onEachFeature={(country, layer) => onEachCountry(country, layer, setSelectedCountry, getCountryData)}
+          onEachFeature={(country, layer) =>
+            onEachCountry(
+              country,
+              layer,
+              setSelectedCountry,
+              getCountryData,
+              carbonIntensity
+            )
+          }
         />
+        }
         <Legend />
         <Layers />
       </MapContainer>
