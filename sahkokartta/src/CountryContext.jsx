@@ -1,10 +1,11 @@
 import { createContext, useState } from 'react';
-import { fetchCountryElectricityData, fetchEmissionsData } from './api';
+import { fetchCountryElectricityData, fetchEmissionsData, fetchRenewables } from './api';
 
 export const CountryContext = createContext({
   selectedMap: 'energyTrade',
   selectedCountry: null,
-  emissionsData: []
+  emissionsData: [],
+  renewablesGeneration: []
 })
 export const CountryDispatchContext = createContext(null)
 
@@ -12,6 +13,7 @@ export const CountryDispatchContext = createContext(null)
 export const CountryDataProvider = ({ children }) => {
   const [countryElectricityGeneration, setCountryElectricityGeneration] = useState([])
   const [carbonIntensity, setCarbonIntensity] = useState([])
+  const [renewablesGeneration, setRenewablesGeneration] = useState([])
   const [selectedCountry, setCountry] = useState(null)
   const [selectedMap, setSelectedMap] = useState('energyTrade')
 
@@ -40,6 +42,16 @@ export const CountryDataProvider = ({ children }) => {
     }
   }
 
+  const fetchRenewableGenerationData = async () => {
+    try {
+      const data = await fetchRenewables()
+      console.log(data)
+      setRenewablesGeneration(data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const getCountryData = async (countryCode) => {
     try {
       const data = await fetchCountryElectricityData(countryCode)
@@ -60,7 +72,9 @@ export const CountryDataProvider = ({ children }) => {
         getCarbonIntensityData,
         carbonIntensity,
         toggleMap,
-        selectedMap
+        selectedMap,
+        fetchRenewableGenerationData,
+        renewablesGeneration
       }}>
       {children}
     </CountryContext.Provider>

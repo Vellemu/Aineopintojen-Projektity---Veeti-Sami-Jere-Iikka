@@ -19,6 +19,10 @@ const fetchCountryElectricityData = async (countryCode) => {
   return jsonData.data
 }
 
+/**
+ * Hakee kaikkien maiden päästöintensiteetin vuonna 2023
+ * @returns json data
+ */
 const fetchEmissionsData = async () => {
   const response = await fetch(`https://api.ember-energy.org/v1/carbon-intensity/yearly?is_aggregate_entity=false&start_date=2023&end_date=2023&include_all_dates_value_range=false&api_key=${apiKey}`)
   const jsonData = await response.json()
@@ -26,4 +30,26 @@ const fetchEmissionsData = async () => {
   return jsonData.data
 }
 
-export { fetchCountryElectricityData, fetchEmissionsData }
+/**
+ * Hakee jokaisen maan tiedot uusiutuvan energian tuotannosta
+ * @returns json data
+ */
+const fetchRenewables = async () => {
+  const response = await fetch(`https://api.ember-energy.org/v1/electricity-generation/yearly?is_aggregate_entity=false&start_date=2023&end_date=2023&series=Renewables&is_aggregate_series=true&include_all_dates_value_range=false&api_key=${apiKey}`)
+  const jsonData = await response.json()
+
+  return jsonData.data
+}
+
+/**
+ * Hakee jokaisen maan tiedot puhtaan energian tuotannosta
+ * @returns json data
+ */
+const fetchClean = async () => {
+  const response = await fetch(`https://api.ember-energy.org/v1/electricity-generation/yearly?is_aggregate_entity=false&start_date=2023&end_date=2023&series=clean&is_aggregate_series=true&include_all_dates_value_range=false&api_key=${apiKey}`)
+  const jsonData = await response.json()
+
+  return jsonData.data
+}
+
+export { fetchCountryElectricityData, fetchEmissionsData, fetchClean, fetchRenewables }
