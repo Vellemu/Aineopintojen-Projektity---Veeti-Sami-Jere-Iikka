@@ -31,6 +31,21 @@ const getCountryStyle = (country, data, colorFn) => {
 }
 
 /**
+ * Luo sisällön tooltipille
+ * @param {*} entity
+ * @param {*} value
+ * @returns 
+ */
+const createTooltipContent = (entity, value) => {
+  return `
+    <div>
+    <span class="entity">${entity}</span>
+    <br />
+    <div>${value}</div>
+    </div>`
+}
+
+/**
  * 
  * @param {*} country 
  * @param {*} layer 
@@ -47,12 +62,10 @@ const onEachCountry = (country, layer, setSelectedCountry, getCountryData, carbo
       return 'No data'
     }
 
-    return `
-    <div>
-    <span class="entity">${countryCarbonIntensity.entity}</span>
-    <br />
-    <div>${countryCarbonIntensity.emissions_intensity_gco2_per_kwh} <abbr>gco2/kwh</abbr></div>
-    </div>`
+    return createTooltipContent(
+      countryCarbonIntensity.entity,
+      `${countryCarbonIntensity.emissions_intensity_gco2_per_kwh} gco2/kwh`
+    )
   }, { sticky: true, className: 'emissions-tooltip' }
   )
 
@@ -80,12 +93,10 @@ const onEachCountryRenewables = (country, layer, renewablesGeneration) => {
       return 'No data'
     }
 
-    return `
-    <div>
-    <span class="entity">${countryRenewables.entity}</span>
-    <br />
-    <div>${countryRenewables.generation_twh} <abbr>twh</abbr> (${countryRenewables.share_of_generation_pct}%)</div> 
-    </div>`
+    return createTooltipContent(
+      countryRenewables.entity,
+      `${countryRenewables.generation_twh} twh (${countryRenewables.share_of_generation_pct}%)`
+    )
   }, { sticky: true, className: 'emissions-tooltip' }
   )
 
