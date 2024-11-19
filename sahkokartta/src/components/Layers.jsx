@@ -37,6 +37,10 @@ const getCountryStyle = (country, data, colorFn) => {
  * @returns 
  */
 const createTooltipContent = (entity, value) => {
+  if (!entity || !value) {
+    return 'No data'
+  }
+
   return `
     <div>
     <span class="entity">${entity}</span>
@@ -49,32 +53,18 @@ const createTooltipContent = (entity, value) => {
  * 
  * @param {*} country 
  * @param {*} layer 
- * @param {*} setSelectedCountry 
- * @param {*} getCountryData 
- * @param {*} carbonIntensity 
+ * @param {*} param2 
  */
-const onEachCountry = (country, layer, setSelectedCountry, getCountryData, carbonIntensity) => {
+const onEachFeature = (country, layer, { tooltipConfig, handleClick }) => {
+  const { data, tooltipCreator } = tooltipConfig
+  const countryData = findCountryData(data, country.properties.ISO3_CODE)
 
-  layer.bindTooltip(() => {
-    const countryCarbonIntensity = findCountryData(carbonIntensity, country.properties.ISO3_CODE)
-
-    if (!countryCarbonIntensity) {
-      return 'No data'
-    }
-
-    return createTooltipContent(
-      countryCarbonIntensity.entity,
-      `${countryCarbonIntensity.emissions_intensity_gco2_per_kwh} gco2/kwh`
-    )
-  }, { sticky: true, className: 'emissions-tooltip' }
+  layer.bindTooltip(
+    () => tooltipCreator(countryData),
+    { sticky: true }
   )
 
-  layer.on('click', () => {
-    console.log('Clicked on:', country.properties);
-    setSelectedCountry(country.properties);
-    getCountryData(country.properties.ISO3_CODE);
-  });
-
+  layer.on('click', handleClick)
 
   layer.on('mouseover', (e) => {
     e.target.setStyle({ fillOpacity: 1 })
@@ -83,31 +73,7 @@ const onEachCountry = (country, layer, setSelectedCountry, getCountryData, carbo
   layer.on('mouseout', (e) => {
     e.target.setStyle({ fillOpacity: 0.8 })
   })
-};
-
-const onEachCountryRenewables = (country, layer, renewablesGeneration) => {
-  layer.bindTooltip(() => {
-    const countryRenewables = findCountryData(renewablesGeneration, country.properties.ISO3_CODE)
-
-    if (!countryRenewables) {
-      return 'No data'
-    }
-
-    return createTooltipContent(
-      countryRenewables.entity,
-      `${countryRenewables.generation_twh} twh (${countryRenewables.share_of_generation_pct}%)`
-    )
-  }, { sticky: true, className: 'emissions-tooltip' }
-  )
-
-  layer.on('mouseover', (e) => {
-    e.target.setStyle({ fillOpacity: 1 })
-  })
-
-  layer.on('mouseout', (e) => {
-    e.target.setStyle({ fillOpacity: 0.8 })
-  })
-};
+}
 
 
 const Layers = () => {
@@ -124,21 +90,40 @@ const Layers = () => {
     toggleLayer(e.name)
   })
 
+  const emissionsTooltipConfig = {
+    data: carbonIntensity,
+    tooltipCreator: data => {
+      return createTooltipContent(data?.entity, `${data?.emissions_intensity_gco2_per_kwh} gco2/kwh`)
+    }
+  }
+
+  const renewablesTooltipConfig = {
+    data: renewablesGeneration,
+    tooltipCreator: data => {
+      return createTooltipContent(
+        data?.entity,
+        `${data?.generation_twh} twh (${data?.share_of_generation_pct}%)`
+      )
+    }
+  }
+
+  const handleCountryClick = country => {
+    setSelectedCountry(country.properties);
+    getCountryData(country.properties.ISO3_CODE);
+  }
+
   return (
     <LayersControl position='topright'>
       <LayersControl.BaseLayer checked name='Carbon intensity'>
         <LayerGroup>
           <GeoJSON
             data={geoData}
-            style={(country) => getCountryStyle(country, carbonIntensity, getColorHex) }
+            style={(country) => getCountryStyle(country, carbonIntensity, getColorHex)}
             onEachFeature={(country, layer) =>
-              onEachCountry(
-                country,
-                layer,
-                setSelectedCountry,
-                getCountryData,
-                carbonIntensity
-              )
+              onEachFeature(country, layer, {
+                tooltipConfig: emissionsTooltipConfig,
+                handleClick: () => handleCountryClick(country)
+              })
             }
           />
         </LayerGroup>
@@ -149,11 +134,10 @@ const Layers = () => {
             data={geoData}
             style={(country) => getCountryStyle(country, renewablesGeneration, renewablesHex)}
             onEachFeature={(country, layer) =>
-              onEachCountryRenewables(
-                country,
-                layer,
-                renewablesGeneration
-              )
+              onEachFeature(country, layer, {
+                tooltipConfig: renewablesTooltipConfig,
+                handleClick: () => handleCountryClick(country)
+              })
             }
           />
         </LayerGroup>
