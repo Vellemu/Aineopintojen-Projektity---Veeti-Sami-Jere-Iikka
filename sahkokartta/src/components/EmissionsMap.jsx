@@ -9,7 +9,7 @@ import Layers from './Layers';
 
 const EmissionsMap = () => {
   const [loading, setLoading] = useState(true)
-  const { carbonIntensity, renewablesGeneration } = useCountry()
+  const { carbonIntensity, renewablesGeneration, layer } = useCountry()
 
   const position = [53.00, 10.00]; // Koordinaatit johon kartta keskitetään
 
@@ -35,7 +35,7 @@ const EmissionsMap = () => {
           attribution='©OpenStreetMap, ©CartoDB'
         />
         {!loading && <Layers />}
-        <Legend />
+        {layer === 'Carbon intensity' && <Legend />}
       </MapContainer>
     </div>
   );

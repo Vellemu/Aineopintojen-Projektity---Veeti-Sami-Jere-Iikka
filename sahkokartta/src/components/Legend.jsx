@@ -1,5 +1,4 @@
 import { useEffect } from "react"
-import { getColorHex } from "../utils"
 import { useMap } from "react-leaflet"
 import L from 'leaflet'
 
@@ -23,7 +22,11 @@ const Legend = () => {
       grades.forEach((grade, i) => {
         const colorBox = L.DomUtil.create('i', 'colorBox', div)
         const g = grade + 1
-        colorBox.style.backgroundColor = getColorHex(g)
+        colorBox.style.backgroundColor = g > 500 ? '#B71C1C' :
+          g > 200 ? '#FC4E2A' :
+            g > 100 ? '#FD8D3C' :
+              g > 50 ? '#FEB24C' :
+                '#FFEDA0'
 
         const text = document.createTextNode(
           `${grade}${grades[i + 1] ? ` - ${grades[i + 1]}` : '+'}`

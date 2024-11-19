@@ -1,4 +1,4 @@
-import { GeoJSON, LayerGroup, LayersControl } from 'react-leaflet';
+import { GeoJSON, LayerGroup, LayersControl, useMap } from 'react-leaflet';
 import geoData from '../geoJson/CNTR_RG_60M_2020_4326.json';
 import { useCountry } from '../hooks/useCountry';
 import { getColorHex, renewablesHex } from '../utils';
@@ -115,8 +115,14 @@ const Layers = () => {
     carbonIntensity,
     getCountryData,
     setSelectedCountry,
-    renewablesGeneration
+    renewablesGeneration,
+    toggleLayer
   } = useCountry()
+
+  const map = useMap()
+  map.on('baselayerchange', (e) => {
+    toggleLayer(e.name)
+  })
 
   return (
     <LayersControl position='topright'>

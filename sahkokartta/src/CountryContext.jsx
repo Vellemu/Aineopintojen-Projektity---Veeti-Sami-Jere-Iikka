@@ -16,6 +16,11 @@ export const CountryDataProvider = ({ children }) => {
   const [renewablesGeneration, setRenewablesGeneration] = useState([])
   const [selectedCountry, setCountry] = useState(null)
   const [selectedMap, setSelectedMap] = useState('energyTrade')
+  const [layer, setLayer] = useState('Carbon intensity')
+
+  const toggleLayer = (layer) => {
+    setLayer(layer)
+  }
 
   const setSelectedCountry = (country) => {
     setCountry(country)
@@ -74,7 +79,9 @@ export const CountryDataProvider = ({ children }) => {
         toggleMap,
         selectedMap,
         fetchRenewableGenerationData,
-        renewablesGeneration
+        renewablesGeneration,
+        layer,
+        toggleLayer
       }}>
       {children}
     </CountryContext.Provider>
