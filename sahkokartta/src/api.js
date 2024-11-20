@@ -18,13 +18,20 @@ const fetchCountryElectricityData = async (countryCode) => {
   return jsonData.data
 }
 
-const fetchMonthlyDataByYear = async (countryCode, year) => {
+const fetchChartData = async (countryCode, periodization, year) => {
   const apiKey = import.meta.env.VITE_API_KEY; /* API-avain ympäristömuuttuja */
-  const response = await fetch('https://api.ember-climate.org/v1/electricity-generation/monthly?' +
+  var startYear = 2000;
+  var endYear = 2024;
+  if(periodization === "monthly") {
+    startYear = year;
+    endYear = startYear + 1;
+  }
+  const response = await fetch('https://api.ember-climate.org/v1/electricity-generation/' + 
+    periodization+ '?' +
     'entity_code=' + countryCode +
     '&is_aggregate_series=false' +
-    '&start_date=' + year  +
-    '&end_date=' + (year + 1)  +
+    '&start_date=' + startYear  +
+    '&end_date=' + endYear  +
     '&api_key=' + apiKey)
 
   const jsonData = await response.json()
@@ -32,4 +39,4 @@ const fetchMonthlyDataByYear = async (countryCode, year) => {
 }
 
 export { fetchCountryElectricityData }
-export { fetchMonthlyDataByYear }
+export { fetchChartData }

@@ -5,14 +5,15 @@ import { useState, useEffect } from 'react';
 import { Slider } from '@mui/material';
 
 /**
- * TODO: Vuosittainen datan esitys kuukausittaisen lisäksi
- * TODO: Värikoodatut tuotantotapojen tekstit näkyviin sivulle
+ * 
  */
 const PercentAreaChart = ({countryCode}) => {
   const [chartData, setChartData] = useState(null);
   const [sliderValue, setSliderValue] = useState(2017);
   const [activeButton, setActiveButton] = useState("monthly");
   const monthlyDataYears = [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
+  const startYear = 2000;
+  const currentYear = 2024;
   const generationMethods = [
     {
       name: "Bioenergy",
@@ -54,42 +55,41 @@ const PercentAreaChart = ({countryCode}) => {
 
   useEffect(() => {
     /**
-     * Haetaan valitun vuoden kuukausittainen sähköntuotantodata ja 
-     * järjestetään se kuukausittain sen kaaviota varten. 
-     * TODO: järkevämpi/siistimpi totetus for-silmukkujen sijaan
+     * Haetaan kuukausittainen data joltain vuodelta 2017-2024 väliltä tai vuosittainen data
+     * 2000-2024 riippuen slider ja radiobutton valinnoista
      */
-    const getMonthlyData = async () => { 
+    const getGenerationData = async () => { 
       const promise = fetchChartData(countryCode, activeButton, sliderValue); 
       const data = await promise;
-      /* console.log(data); */
+
       var areachartData = [];
       if(activeButton === "monthly") { 
         areachartData = [{period: "jan"}, {period: "feb"}, {period: "mar"}, {period: "apr"}, {period: "may"}, {period: "jun"}, {period: "jul"}, {period: "aug"}, {period: "sep"}, {period: "oct"}, {period: "nov"}, {period: "dec"}]
       }
       else {
-        var startYear = 2000;
-        var currentYear = 2024;
         var years = [];
-        while (startYear < currentYear) {
-          years.push({period: startYear++});
+        var year = startYear;
+        while (year < currentYear) {
+          years.push({period: year++});
         }
         areachartData = years;
       }
-      for (var m = 0, i = 0; data[i] != null && m < areachartData.length; m++) {
-        for(; ; i++) {
-          Object.defineProperty(areachartData[m], data[i].series, {value: data[i].generation_twh});
-          if (data[i+1] == null || data[i].date != data[i+1].date) {
-            i++;
-            break;
-          }
-        }
-      }
-      console.log(areachartData);
+
+      var dataPoint;
+      var i = 0;
+      areachartData.map((o) => {     
+        dataPoint = data.slice(i).filter((entry) => entry.date === data[i].date);
+        console.log(dataPoint);
+        dataPoint.map((entry) => {
+          Object.defineProperty(o, entry.series, {value: entry.generation_twh});
+          i++;
+        }); 
+      });
       setChartData(areachartData);
     }
-    getMonthlyData();
+    getGenerationData();
   },[countryCode, sliderValue, activeButton]);
- 
+
   const setYear = (e, year) => {
     setSliderValue(year);
   }
