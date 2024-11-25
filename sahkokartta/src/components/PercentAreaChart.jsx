@@ -17,7 +17,7 @@ const PercentAreaChart = ({countryCode}) => {
   const generationMethods = [
     {
       name: "Bioenergy",
-      color: "#00ff00",
+      color: "#00dd00",
     },
     {
       name: "Coal",
@@ -33,7 +33,7 @@ const PercentAreaChart = ({countryCode}) => {
     },
     {
       name: "Nuclear",
-      color: "#cccc00",
+      color: "#dddd00",
     },
     {
       name: "Other fossil",
@@ -191,7 +191,10 @@ const PercentAreaChart = ({countryCode}) => {
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="period" />
         <YAxis tickFormatter={(decimal) => `${decimal * 100}%`} />
-        <Tooltip content={renderTooltipContent} />
+        <Tooltip
+          content={renderTooltipContent} 
+          wrapperStyle={{ backgroundColor: "#ffffff",  paddingLeft: "5px", paddingRight: "5px", borderRadius: "25px"}} 
+        />
         {generationMethods.map((method) => <Area 
           key={method.name} 
           type="monotone"
