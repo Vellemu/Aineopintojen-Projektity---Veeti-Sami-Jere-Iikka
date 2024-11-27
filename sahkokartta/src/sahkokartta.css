@@ -52,18 +52,30 @@
 
 /* PercentAreaChart.jsx */
 .areachart-container {
-  width: 50vh;
-  height: 40vh;
-}
+  position: absolute;
+}  
   .areachart {
-    position: absolute;
-    left: 10%;
-    right: 10%;
-  }
-  .slider {
-    position: absolute;
-    left: 30%;
-    right: 10%;
+    display: inline-block;
   }
 
+  .methodlist {
+    position: absolute;
+    top: -10px;
+    background-color: beige;
+    width: 130px;
+    padding-left: 20px;
+    display: inline-block;
+    border-radius: 10px;
+  }
+
+  .radiobuttons {
+    position: absolute;
+    display: inline-block;
+    top: 170px;
+  }
+
+  .slider {
+    margin-left: 2%;
+  }
+  
   /* App.jsx css */ 

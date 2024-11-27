@@ -79,7 +79,6 @@ const PercentAreaChart = ({countryCode}) => {
       var i = 0;
       areachartData.map((o) => {     
         dataPoint = data.slice(i).filter((entry) => entry.date === data[i].date);
-        console.log(dataPoint);
         dataPoint.map((entry) => {
           Object.defineProperty(o, entry.series, {value: entry.generation_twh});
           i++;
@@ -181,46 +180,54 @@ const PercentAreaChart = ({countryCode}) => {
   };
 
   return (
-    <>
-    <div className='areachart-container'>
-      {chartData && 
-      <AreaChart width={800} height={400} className='areachart'
-          data={chartData}
-          stackOffset='expand'
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="period" />
-        <YAxis tickFormatter={(decimal) => `${decimal * 100}%`} />
-        <Tooltip
-          content={renderTooltipContent} 
-          wrapperStyle={{ backgroundColor: "#ffffff",  paddingLeft: "5px", paddingRight: "5px", borderRadius: "25px"}} 
-        />
-        {generationMethods.map((method) => <Area 
-          key={method.name} 
-          type="monotone"
-          dataKey={method.name} 
-          stackId="1" 
-          stroke={method.color} 
-          fill={method.color} />)}
-      </AreaChart>}
-        {activeButton === "monthly" && <Slider className='slider'
-          step={null}
-          marks={marks(monthlyDataYears)}
-          defaultValue={2017}
-          min={2017}
-          max={2024}
-          valueLabelDisplay="auto"
-          onChange={setYear}    
-        />}  
-        <ul className='methodlist'>
-          {generationMethods.map((method) => <li 
-            key={method.name} 
-            style={{color: method.color}}
-            >{method.name}</li>)}
-        </ul>
-        <RadioButtons className='radiobuttons' activeButton={activeButton} setActiveButton={setActiveButton}/>
+  <>
+    {chartData && 
+    <AreaChart width={800} height={400} className='areachart'
+        data={chartData}
+        stackOffset='expand'
+    >
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="period" />
+      <YAxis tickFormatter={(decimal) => `${decimal * 100}%`} />
+      <Tooltip
+        content={renderTooltipContent} 
+        wrapperStyle={{ backgroundColor: "#ffffff",  paddingLeft: "5px", paddingRight: "5px", borderRadius: "25px"}} 
+      />
+      {generationMethods.map((method) => <Area 
+        key={method.name} 
+        type="monotone"
+        dataKey={method.name} 
+        stackId="1" 
+        stroke={method.color} 
+        fill={method.color} />)}
+    </AreaChart>}
+    
+    <ul className='methodlist'>
+      {generationMethods.map((method) => 
+      <li 
+        key={method.name} 
+        style={{color: method.color}}
+      >{method.name}
+      </li>)}
+    </ul>
+    
+    <div className='radiobuttons'>
+    <RadioButtons
+      activeButton={activeButton} 
+      setActiveButton={setActiveButton}/>
     </div>
-    </>    
+    
+    {activeButton === "monthly" && 
+    <Slider className='slider'
+      step={null}
+      marks={marks(monthlyDataYears)}
+      defaultValue={2017}
+      min={2017}
+      max={2024}
+      valueLabelDisplay="auto"
+      onChange={setYear}
+    />}  
+  </>    
   )  
 }
 export default PercentAreaChart
