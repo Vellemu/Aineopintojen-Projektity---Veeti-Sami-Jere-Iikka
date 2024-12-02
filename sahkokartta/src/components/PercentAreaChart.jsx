@@ -20,6 +20,10 @@ const PercentAreaChart = ({countryCode}) => {
       color: "#00dd00",
     },
     {
+      name: "Nuclear",
+      color: "#dddd00",
+    },
+    {
       name: "Coal",
       color: "#000000"
     },
@@ -30,10 +34,6 @@ const PercentAreaChart = ({countryCode}) => {
     {
       name: "Hydro",
       color: "#00d4ff",
-    },
-    {
-      name: "Nuclear",
-      color: "#dddd00",
     },
     {
       name: "Other fossil",
@@ -50,7 +50,7 @@ const PercentAreaChart = ({countryCode}) => {
     {
       name: "Wind",
       color: "#ccccff",
-    }
+    },
   ];
 
   useEffect(() => {
@@ -64,7 +64,8 @@ const PercentAreaChart = ({countryCode}) => {
 
       var areachartData = [];
       if(activeButton === "monthly") { 
-        areachartData = [{period: "jan"}, {period: "feb"}, {period: "mar"}, {period: "apr"}, {period: "may"}, {period: "jun"}, {period: "jul"}, {period: "aug"}, {period: "sep"}, {period: "oct"}, {period: "nov"}, {period: "dec"}]
+        areachartData = [{period: "jan"}, {period: "feb"}, {period: "mar"}, {period: "apr"}, {period: "may"}, {period: "jun"}, 
+                          {period: "jul"}, {period: "aug"}, {period: "sep"}, {period: "oct"}, {period: "nov"}, {period: "dec"}]
       }
       else {
         var years = [];
@@ -80,7 +81,7 @@ const PercentAreaChart = ({countryCode}) => {
       areachartData.map((o) => {     
         dataPoint = data.slice(i).filter((entry) => entry.date === data[i].date);
         dataPoint.map((entry) => {
-          Object.defineProperty(o, entry.series, {value: entry.generation_twh});
+          Object.defineProperty(o, entry.series, {value: entry.generation_twh, enumerable: true});
           i++;
         }); 
       });
@@ -89,10 +90,20 @@ const PercentAreaChart = ({countryCode}) => {
     getGenerationData();
   },[countryCode, sliderValue, activeButton]);
 
+  /**
+   * 
+   * @param {*} e 
+   * @param {*} year 
+   */
   const setYear = (e, year) => {
     setSliderValue(year);
   }
 
+  /**
+   * 
+   * @param {*} values 
+   * @returns 
+   */
   const marks = (values) => {
     var a = [];
     values.map((x) =>  a.push({value: x, label: x.toString()}));
@@ -107,8 +118,13 @@ const PercentAreaChart = ({countryCode}) => {
     const { payload, label } = o;
     const total = payload.reduce((result, entry) => result + entry.value, 0).toFixed(2);
 
-  const getFullName = (month) => {
-    switch (month) {
+  /**
+   * 
+   * @param {*} period 
+   * @returns 
+   */
+  const getFullName = (period) => {
+    switch (period) {
       case "jan": return "January";
       case "feb": return "February"
       case "mar": return "March"
@@ -122,9 +138,15 @@ const PercentAreaChart = ({countryCode}) => {
       case "nov": return "November"
       case "dec": return "December"
     }
-    return month;
+    return period;
   }
 
+  /**
+   * 
+   * @param {*} value 
+   * @param {*} total 
+   * @returns 
+   */
   const getPercent = (value, total) => {
     const ratio = total > 0 ? value / total : 0;
     return (ratio * 100).toFixed(2);
@@ -179,6 +201,39 @@ const PercentAreaChart = ({countryCode}) => {
    )
   };
 
+  /**
+   * Järjestää datan suurimmasta tuotantotavasta pieninpään ensimmäisen 
+   * datapisteen(ajanjakson) perusteella
+   * @returns 
+   */
+  const renderData = () => {
+    let methods = generationMethods;
+    const firstDataPoint = chartData[0];
+    var v1;
+    var v2;
+    methods.sort((a,b) => {
+      Object.entries(firstDataPoint).forEach(([key, value]) => {
+        if(a.name === key) {
+          v1 = value;
+        } 
+        if(b.name === key) {
+          v2 = value;
+        } 
+      })
+      return v2-v1;
+    });
+    return (
+      methods.map((method) => 
+        <Area 
+          key={method.name} 
+          type="monotone"
+          dataKey={method.name} 
+          stackId="1" 
+          stroke={method.color} 
+          fill={method.color} />)
+    ) 
+  }
+
   return (
   <>
     {chartData && 
@@ -193,13 +248,7 @@ const PercentAreaChart = ({countryCode}) => {
         content={renderTooltipContent} 
         wrapperStyle={{ backgroundColor: "#ffffff",  paddingLeft: "5px", paddingRight: "5px", borderRadius: "25px"}} 
       />
-      {generationMethods.map((method) => <Area 
-        key={method.name} 
-        type="monotone"
-        dataKey={method.name} 
-        stackId="1" 
-        stroke={method.color} 
-        fill={method.color} />)}
+      {renderData()}
     </AreaChart>}
     
     <ul className='methodlist'>
