@@ -9,17 +9,17 @@ import Layers from './Layers';
 
 const EmissionsMap = () => {
   const [loading, setLoading] = useState(true)
-  const { carbonIntensity, renewablesGeneration, layer } = useCountry()
+  const { carbonIntensity, renewablesGeneration, cleanGeneration, layer } = useCountry()
 
   const position = [53.00, 10.00]; // Koordinaatit johon kartta keskitetään
 
   useEffect(() => {
     setLoading(true)
-    if (carbonIntensity && carbonIntensity.length > 0 && renewablesGeneration.length > 0) {
+    if (carbonIntensity && carbonIntensity.length > 0 && renewablesGeneration.length > 0 && cleanGeneration) {
       setLoading(false)
     }
 
-  }, [carbonIntensity, renewablesGeneration])
+  }, [carbonIntensity, renewablesGeneration, cleanGeneration])
 
   // TODO: Loading animaatio
   // TODO: Legend korjaus

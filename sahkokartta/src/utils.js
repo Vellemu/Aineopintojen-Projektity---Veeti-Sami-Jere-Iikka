@@ -12,7 +12,7 @@ export const getColorHex = (data) => {
           '#FFEDA0'
 }
 
-export const renewablesHex = (data) => {
+export const renewablesAndCleanHex = (data) => {
   const pct = data.share_of_generation_pct
   return pct >= 100 ? '#006400' :
     pct > 80 ? '#228B22' :

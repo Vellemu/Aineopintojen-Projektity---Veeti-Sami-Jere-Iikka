@@ -1,7 +1,7 @@
 import { GeoJSON, LayerGroup, LayersControl, useMap } from 'react-leaflet';
 import geoData from '../geoJson/CNTR_RG_60M_2020_4326.json';
 import { useCountry } from '../hooks/useCountry';
-import { getColorHex, renewablesHex } from '../utils';
+import { getColorHex, renewablesAndCleanHex } from '../utils';
 
 const defaultCountryStyle = {
   weight: 2,
@@ -82,6 +82,7 @@ const Layers = () => {
     getCountryData,
     setSelectedCountry,
     renewablesGeneration,
+    cleanGeneration,
     toggleLayer
   } = useCountry()
 
@@ -99,6 +100,16 @@ const Layers = () => {
 
   const renewablesTooltipConfig = {
     data: renewablesGeneration,
+    tooltipCreator: data => {
+      return createTooltipContent(
+        data?.entity,
+        `${data?.generation_twh} twh (${data?.share_of_generation_pct}%)`
+      )
+    }
+  }
+
+  const cleanTooltipConfig = {
+    data: cleanGeneration,
     tooltipCreator: data => {
       return createTooltipContent(
         data?.entity,
@@ -132,7 +143,7 @@ const Layers = () => {
         <LayerGroup>
           <GeoJSON
             data={geoData}
-            style={(country) => getCountryStyle(country, renewablesGeneration, renewablesHex)}
+            style={(country) => getCountryStyle(country, renewablesGeneration, renewablesAndCleanHex)}
             onEachFeature={(country, layer) =>
               onEachFeature(country, layer, {
                 tooltipConfig: renewablesTooltipConfig,
@@ -144,7 +155,16 @@ const Layers = () => {
       </LayersControl.BaseLayer>
       <LayersControl.BaseLayer name='Clean energy generation'>
         <LayerGroup>
-
+          <GeoJSON
+            data={geoData}
+            style={(country) => getCountryStyle(country, cleanGeneration, renewablesAndCleanHex)}
+            onEachFeature={(country, layer) =>
+              onEachFeature(country, layer, {
+                tooltipConfig: cleanTooltipConfig,
+                handleClick: () => handleCountryClick(country)
+              })
+            }
+          />
         </LayerGroup>
       </LayersControl.BaseLayer>
     </LayersControl>

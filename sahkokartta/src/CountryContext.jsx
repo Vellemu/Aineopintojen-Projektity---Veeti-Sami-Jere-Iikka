@@ -1,5 +1,5 @@
 import { createContext, useState } from 'react';
-import { fetchCountryElectricityData, fetchEmissionsData, fetchRenewables } from './api';
+import { fetchClean, fetchCountryElectricityData, fetchEmissionsData, fetchRenewables } from './api';
 
 export const CountryContext = createContext({
   selectedMap: 'energyTrade',
@@ -17,6 +17,7 @@ export const CountryDataProvider = ({ children }) => {
   const [selectedCountry, setCountry] = useState(null)
   const [selectedMap, setSelectedMap] = useState('energyTrade')
   const [layer, setLayer] = useState('Carbon intensity')
+  const [cleanGeneration, setCleanGeneration] = useState([])
 
   const toggleLayer = (layer) => {
     setLayer(layer)
@@ -57,6 +58,16 @@ export const CountryDataProvider = ({ children }) => {
     }
   }
 
+  const fetchCleanGenerationData = async () => {
+    try {
+      const data = await fetchClean()
+      console.log(data)
+      setCleanGeneration(data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const getCountryData = async (countryCode) => {
     try {
       const data = await fetchCountryElectricityData(countryCode)
@@ -81,7 +92,9 @@ export const CountryDataProvider = ({ children }) => {
         fetchRenewableGenerationData,
         renewablesGeneration,
         layer,
-        toggleLayer
+        toggleLayer,
+        cleanGeneration,
+        fetchCleanGenerationData
       }}>
       {children}
     </CountryContext.Provider>

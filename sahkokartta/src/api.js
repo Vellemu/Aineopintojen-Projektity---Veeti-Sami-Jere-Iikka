@@ -49,6 +49,8 @@ const fetchClean = async () => {
   const response = await fetch(`https://api.ember-energy.org/v1/electricity-generation/yearly?is_aggregate_entity=false&start_date=2023&end_date=2023&series=clean&is_aggregate_series=true&include_all_dates_value_range=false&api_key=${apiKey}`)
   const jsonData = await response.json()
 
+  console.log(jsonData.data)
+
   return jsonData.data
 }
 

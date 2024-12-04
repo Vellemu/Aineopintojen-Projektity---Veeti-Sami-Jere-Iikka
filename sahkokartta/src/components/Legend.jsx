@@ -1,14 +1,19 @@
 import { useEffect } from "react"
 import { useMap } from "react-leaflet"
 import L from 'leaflet'
+//import { useCountry } from "../hooks/useCountry"
+
 
 /**
  * Lisää karttaan selitteen väriskaalalle
+ * TODO: Kaikille karttatasoille oma legend
  */
 const Legend = () => {
   const map = useMap()
+  //const { layer } = useCountry()
 
   useEffect(() => {
+    //console.log(map.layer.name)
     const legend = L.control({ position: 'bottomleft' })
 
     legend.onAdd = () => {

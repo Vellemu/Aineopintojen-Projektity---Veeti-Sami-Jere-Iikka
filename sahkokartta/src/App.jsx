@@ -10,7 +10,14 @@ import EmissionsMap from './components/EmissionsMap';
 import './sahkokartta.css'
 
 const App = () => {
-  const { selectedCountry, toggleMap, selectedMap, getCarbonIntensityData, fetchRenewableGenerationData } = useCountry()
+  const {
+    selectedCountry,
+    toggleMap,
+    selectedMap,
+    getCarbonIntensityData,
+    fetchRenewableGenerationData,
+    fetchCleanGenerationData
+  } = useCountry()
 
   /**
    * Päivittää valitun maan tiedot
@@ -25,6 +32,7 @@ const App = () => {
     toggleMap()
     getCarbonIntensityData()
     fetchRenewableGenerationData()
+    fetchCleanGenerationData()
   }
 
   return (
