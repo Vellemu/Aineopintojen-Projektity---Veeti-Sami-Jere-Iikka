@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { GeoJSON, LayerGroup, LayersControl, useMap } from 'react-leaflet';
 import geoData from '../geoJson/CNTR_RG_60M_2020_4326.json';
 import { useCountry } from '../hooks/useCountry';
@@ -76,13 +77,10 @@ const onEachFeature = (country, layer, { tooltipConfig, handleClick }) => {
 }
 
 
-const Layers = () => {
+const Layers = ({ energyData }) => {
   const {
-    carbonIntensity,
     getCountryData,
     setSelectedCountry,
-    renewablesGeneration,
-    cleanGeneration,
     toggleLayer
   } = useCountry()
 
@@ -92,14 +90,14 @@ const Layers = () => {
   })
 
   const emissionsTooltipConfig = {
-    data: carbonIntensity,
+    data: energyData.carbonIntensity.data,
     tooltipCreator: data => {
       return createTooltipContent(data?.entity, `${data?.emissions_intensity_gco2_per_kwh} gco2/kwh`)
     }
   }
 
   const renewablesTooltipConfig = {
-    data: renewablesGeneration,
+    data: energyData.renewables.data,
     tooltipCreator: data => {
       return createTooltipContent(
         data?.entity,
@@ -109,7 +107,7 @@ const Layers = () => {
   }
 
   const cleanTooltipConfig = {
-    data: cleanGeneration,
+    data: energyData.clean.data,
     tooltipCreator: data => {
       return createTooltipContent(
         data?.entity,
@@ -129,7 +127,7 @@ const Layers = () => {
         <LayerGroup>
           <GeoJSON
             data={geoData}
-            style={(country) => getCountryStyle(country, carbonIntensity, getColorHex)}
+            style={(country) => getCountryStyle(country, energyData.carbonIntensity.data, getColorHex)}
             onEachFeature={(country, layer) =>
               onEachFeature(country, layer, {
                 tooltipConfig: emissionsTooltipConfig,
@@ -143,7 +141,7 @@ const Layers = () => {
         <LayerGroup>
           <GeoJSON
             data={geoData}
-            style={(country) => getCountryStyle(country, renewablesGeneration, renewablesAndCleanHex)}
+            style={(country) => getCountryStyle(country, energyData.renewables.data, renewablesAndCleanHex)}
             onEachFeature={(country, layer) =>
               onEachFeature(country, layer, {
                 tooltipConfig: renewablesTooltipConfig,
@@ -157,7 +155,7 @@ const Layers = () => {
         <LayerGroup>
           <GeoJSON
             data={geoData}
-            style={(country) => getCountryStyle(country, cleanGeneration, renewablesAndCleanHex)}
+            style={(country) => getCountryStyle(country, energyData.clean.data, renewablesAndCleanHex)}
             onEachFeature={(country, layer) =>
               onEachFeature(country, layer, {
                 tooltipConfig: cleanTooltipConfig,

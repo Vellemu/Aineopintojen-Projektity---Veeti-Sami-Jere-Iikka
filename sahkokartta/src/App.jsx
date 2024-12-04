@@ -13,10 +13,7 @@ const App = () => {
   const {
     selectedCountry,
     toggleMap,
-    selectedMap,
-    getCarbonIntensityData,
-    fetchRenewableGenerationData,
-    fetchCleanGenerationData
+    selectedMap
   } = useCountry()
 
   /**
@@ -30,9 +27,6 @@ const App = () => {
 
   const changeMap = () => {
     toggleMap()
-    getCarbonIntensityData()
-    fetchRenewableGenerationData()
-    fetchCleanGenerationData()
   }
 
   return (

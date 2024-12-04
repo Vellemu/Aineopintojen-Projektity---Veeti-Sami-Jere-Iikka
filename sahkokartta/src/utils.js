@@ -21,3 +21,10 @@ export const renewablesAndCleanHex = (data) => {
           pct > 20 ? '#FF4500' :
             '#8B0000'
 }
+
+const apiKey = import.meta.env.VITE_API_KEY
+export const urls = [
+  { key: 'carbonIntensity', url: `https://api.ember-energy.org/v1/carbon-intensity/yearly?is_aggregate_entity=false&start_date=2023&end_date=2023&include_all_dates_value_range=false&api_key=${apiKey}` },
+  { key: 'renewables', url: `https://api.ember-energy.org/v1/electricity-generation/yearly?is_aggregate_entity=false&start_date=2023&end_date=2023&series=Renewables&is_aggregate_series=true&include_all_dates_value_range=false&api_key=${apiKey}` },
+  { key: 'clean', url: `https://api.ember-energy.org/v1/electricity-generation/yearly?is_aggregate_entity=false&start_date=2023&end_date=2023&series=clean&is_aggregate_series=true&include_all_dates_value_range=false&api_key=${apiKey}` }
+]

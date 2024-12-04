@@ -4,25 +4,26 @@ import Legend from './Legend';
 
 import '../sahkokartta.css';
 import '../emissionsMap.css';
-import { useEffect, useState } from 'react';
 import Layers from './Layers';
+import useMultiFetch from '../hooks/useMultiFetch';
+import { urls } from '../utils';
 
 const EmissionsMap = () => {
-  const [loading, setLoading] = useState(true)
-  const { carbonIntensity, renewablesGeneration, cleanGeneration, layer } = useCountry()
+  const { layer } = useCountry()
+  const { data, loading, error } = useMultiFetch(urls)
 
   const position = [53.00, 10.00]; // Koordinaatit johon kartta keskitetään
 
-  useEffect(() => {
-    setLoading(true)
-    if (carbonIntensity && carbonIntensity.length > 0 && renewablesGeneration.length > 0 && cleanGeneration) {
-      setLoading(false)
-    }
-
-  }, [carbonIntensity, renewablesGeneration, cleanGeneration])
+  if (loading) {
+    return <div>Loading...</div>
+  }
+  if (error) {
+    return <div>Error: {error}</div>
+  }
 
   // TODO: Loading animaatio
   // TODO: Legend korjaus
+
   return (
     <div>
       <MapContainer center={position} zoom={4} style={{ height: '100vh', width: '100%' }}>
@@ -34,7 +35,7 @@ const EmissionsMap = () => {
           url="https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png"
           attribution='©OpenStreetMap, ©CartoDB'
         />
-        {!loading && <Layers />}
+        {!loading && <Layers energyData={data}/>}
         {layer === 'Carbon intensity' && <Legend />}
       </MapContainer>
     </div>
