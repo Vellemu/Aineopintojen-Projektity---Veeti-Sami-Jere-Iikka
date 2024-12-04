@@ -16,7 +16,7 @@ export const CountryDataProvider = ({ children }) => {
   const [renewablesGeneration, setRenewablesGeneration] = useState([])
   const [selectedCountry, setCountry] = useState(null)
   const [selectedMap, setSelectedMap] = useState('energyTrade')
-  const [layer, setLayer] = useState('Carbon intensity')
+  const [layer, setLayer] = useState('Clean energy generation')
   const [cleanGeneration, setCleanGeneration] = useState([])
 
   const toggleLayer = (layer) => {

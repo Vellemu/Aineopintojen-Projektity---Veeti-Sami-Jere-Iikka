@@ -123,14 +123,14 @@ const Layers = ({ energyData }) => {
 
   return (
     <LayersControl position='topright'>
-      <LayersControl.BaseLayer checked name='Carbon intensity'>
+      <LayersControl.BaseLayer checked name='Clean energy generation'>
         <LayerGroup>
           <GeoJSON
             data={geoData}
-            style={(country) => getCountryStyle(country, energyData.carbonIntensity.data, getColorHex)}
+            style={(country) => getCountryStyle(country, energyData.clean.data, renewablesAndCleanHex)}
             onEachFeature={(country, layer) =>
               onEachFeature(country, layer, {
-                tooltipConfig: emissionsTooltipConfig,
+                tooltipConfig: cleanTooltipConfig,
                 handleClick: () => handleCountryClick(country)
               })
             }
@@ -151,14 +151,14 @@ const Layers = ({ energyData }) => {
           />
         </LayerGroup>
       </LayersControl.BaseLayer>
-      <LayersControl.BaseLayer name='Clean energy generation'>
+      <LayersControl.BaseLayer name='Carbon intensity'>
         <LayerGroup>
           <GeoJSON
             data={geoData}
-            style={(country) => getCountryStyle(country, energyData.clean.data, renewablesAndCleanHex)}
+            style={(country) => getCountryStyle(country, energyData.carbonIntensity.data, getColorHex)}
             onEachFeature={(country, layer) =>
               onEachFeature(country, layer, {
-                tooltipConfig: cleanTooltipConfig,
+                tooltipConfig: emissionsTooltipConfig,
                 handleClick: () => handleCountryClick(country)
               })
             }

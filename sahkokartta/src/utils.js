@@ -5,11 +5,12 @@
 */
 export const getColorHex = (data) => {
   const value = data.emissions_intensity_gco2_per_kwh
-  return value > 500 ? '#B71C1C' :
-    value > 200 ? '#FC4E2A' :
-      value > 100 ? '#FD8D3C' :
-        value > 50 ? '#FEB24C' :
-          '#FFEDA0'
+  return value > 500 ? '#8B0000' :
+    value > 300 ? '#B71C1C' :
+      value > 200 ? '#FC4E2A' :
+        value > 100 ? '#FD8D3C' :
+          value > 50 ? '#FEB24C' :
+            '#FFEDA0'
 }
 
 export const renewablesAndCleanHex = (data) => {
