@@ -1,23 +1,77 @@
 import { createContext, useState } from 'react';
-import { fetchCountryElectricityData } from './api';
+import { fetchClean, fetchCountryElectricityData, fetchEmissionsData, fetchRenewables } from './api';
 
 export const CountryContext = createContext({
-  selectedCountry: null
+  selectedMap: 'energyTrade',
+  selectedCountry: null,
+  emissionsData: [],
+  renewablesGeneration: []
 })
 export const CountryDispatchContext = createContext(null)
 
 // eslint-disable-next-line react/prop-types
 export const CountryDataProvider = ({ children }) => {
   const [countryElectricityGeneration, setCountryElectricityGeneration] = useState([])
+  const [carbonIntensity, setCarbonIntensity] = useState([])
+  const [renewablesGeneration, setRenewablesGeneration] = useState([])
   const [selectedCountry, setCountry] = useState(null)
+  const [selectedMap, setSelectedMap] = useState('energyTrade')
+  const [layer, setLayer] = useState('Clean energy generation')
+  const [cleanGeneration, setCleanGeneration] = useState([])
+
+  const toggleLayer = (layer) => {
+    setLayer(layer)
+  }
 
   const setSelectedCountry = (country) => {
     setCountry(country)
   }
 
+  const toggleMap = () => {
+    console.log(selectedMap)
+    if (selectedMap === 'energyTrade') {
+      console.log('setting map to emissions')
+      setSelectedMap('emissions')
+    } else {
+      console.log('setting map to trade')
+      setSelectedMap('energyTrade')
+    }
+  }
+
+  const getCarbonIntensityData = async () => {
+    try {
+      const data = await fetchEmissionsData()
+      console.log(data)
+      setCarbonIntensity(data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const fetchRenewableGenerationData = async () => {
+    try {
+      const data = await fetchRenewables()
+      console.log(data)
+      setRenewablesGeneration(data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const fetchCleanGenerationData = async () => {
+    try {
+      const data = await fetchClean()
+      console.log(data)
+      setCleanGeneration(data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const getCountryData = async (countryCode) => {
     try {
       const data = await fetchCountryElectricityData(countryCode)
+      console.log(data)
       setCountryElectricityGeneration(data)
     } catch (error) {
       console.error(error)
@@ -30,7 +84,17 @@ export const CountryDataProvider = ({ children }) => {
         getCountryData,
         countryElectricityGeneration,
         selectedCountry,
-        setSelectedCountry
+        setSelectedCountry,
+        getCarbonIntensityData,
+        carbonIntensity,
+        toggleMap,
+        selectedMap,
+        fetchRenewableGenerationData,
+        renewablesGeneration,
+        layer,
+        toggleLayer,
+        cleanGeneration,
+        fetchCleanGenerationData
       }}>
       {children}
     </CountryContext.Provider>
