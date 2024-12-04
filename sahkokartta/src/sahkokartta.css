@@ -50,4 +50,20 @@
     cursor: pointer;
   }
 
+/* PercentAreaChart.jsx */
+.areachart-container {
+  width: 50vh;
+  height: 40vh;
+}
+  .areachart {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+  }
+  .slider {
+    position: absolute;
+    left: 30%;
+    right: 10%;
+  }
+
   /* App.jsx css */ 

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useCountry } from '../hooks/useCountry';
 
 import geoData from '../geoJson/CNTR_RG_60M_2020_4326.json';
+import PercentAreaChart from './PercentAreaChart';
 
 /**
  * TODO: Näyttää yhdestä maasta enemmän dataa
@@ -25,9 +26,14 @@ const Country = () => {
   }, [countryCode])
 
   return (
-    <div>
-      <h1>{country} <Link to='/'>Takaisin karttaan</Link></h1>
-    </div>
+    <>
+      <div>
+        <h1>{country} <Link to='/'>Takaisin karttaan</Link></h1>
+      </div>
+      <div>
+        <PercentAreaChart countryCode={countryCode} />
+      </div>
+    </>
   )
 }
 
