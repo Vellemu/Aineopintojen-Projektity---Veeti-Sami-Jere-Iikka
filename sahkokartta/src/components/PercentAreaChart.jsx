@@ -36,20 +36,20 @@ const PercentAreaChart = ({countryCode}) => {
       color: "#00d4ff",
     },
     {
-      name: "Other fossil",
-      color: "#808080",
-    },
-    {
-      name: "Other renewables",
-      color: "#a020f0",
-    },
-    {
       name: "Solar",
       color: "#ff0000",
     },
     {
       name: "Wind",
       color: "#ccccff",
+    },
+    {
+      name: "Other fossil",
+      color: "#808080",
+    },
+    {
+      name: "Other renewables",
+      color: "#a020f0",
     },
   ];
 
@@ -99,11 +99,6 @@ const PercentAreaChart = ({countryCode}) => {
     setSliderValue(year);
   }
 
-  /**
-   * 
-   * @param {*} values 
-   * @returns 
-   */
   const marks = (values) => {
     var a = [];
     values.map((x) =>  a.push({value: x, label: x.toString()}));
@@ -119,8 +114,9 @@ const PercentAreaChart = ({countryCode}) => {
     const total = payload.reduce((result, entry) => result + entry.value, 0).toFixed(2);
 
   /**
-   * 
-   * @param {*} period 
+   * Palauttaa lyhennetyn periodin nimen kokonaisena, jos kyseessä kuukausi
+   * muuten palauttaa parametrinä annetun periodin sellaisenaan
+   * @param {*} period kuukausi tai vuosi
    * @returns 
    */
   const getFullName = (period) => {
@@ -141,12 +137,6 @@ const PercentAreaChart = ({countryCode}) => {
     return period;
   }
 
-  /**
-   * 
-   * @param {*} value 
-   * @param {*} total 
-   * @returns 
-   */
   const getPercent = (value, total) => {
     const ratio = total > 0 ? value / total : 0;
     return (ratio * 100).toFixed(2);
@@ -166,6 +156,10 @@ const PercentAreaChart = ({countryCode}) => {
   )
   };
 
+  /**
+   * Komponentti valintanappuloille joista vain yksi voi olla 
+   * aktiivinen kerrallaan
+   */
   const RadioButtons = ({activeButton, setActiveButton}) => {
     
     const handleYearly = () => {
@@ -202,13 +196,13 @@ const PercentAreaChart = ({countryCode}) => {
   };
 
   /**
-   * Järjestää datan suurimmasta tuotantotavasta pieninpään ensimmäisen 
-   * datapisteen(ajanjakson) perusteella
-   * @returns 
+   * Järjestää datan ensimmäisen datapisteen perusteella (kuukausittaisessa kaaviossa tammikuu valitulta vuodelta, vuosittaisessa vuosi 2000) 
+   * suurimmasta tuotantotavasta pieninpään 
+   * @returns järjestetyt <Area>-elementit
    */
-  const renderData = () => {
-    let methods = generationMethods;
-    const firstDataPoint = chartData[0];
+  const renderSortedData = () => {
+    let methods = generationMethods.slice();
+    let firstDataPoint = chartData[0];
     var v1;
     var v2;
     methods.sort((a,b) => {
@@ -248,7 +242,7 @@ const PercentAreaChart = ({countryCode}) => {
         content={renderTooltipContent} 
         wrapperStyle={{ backgroundColor: "#ffffff",  paddingLeft: "5px", paddingRight: "5px", borderRadius: "25px"}} 
       />
-      {renderData()}
+      {renderSortedData()}
     </AreaChart>}
     
     <ul className='methodlist'>
