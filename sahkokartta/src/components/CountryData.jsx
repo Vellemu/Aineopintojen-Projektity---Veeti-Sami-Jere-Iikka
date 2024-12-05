@@ -15,7 +15,7 @@ import { useEffect } from "react";
     console.log(selectedCountry)
   }, [selectedCountry])
 
-// Kokonaistuotanto TODO: net import pois?
+// Kokonaistuotanto 
 const totalGeneration = countryElectricityGeneration
 ? countryElectricityGeneration.reduce((total, country) => total + (country.generation_twh || 0), 0)
 : 0;
@@ -59,8 +59,7 @@ const combinedRenewablepercentage = adjustedTotalGeneration ? (combinedRenewable
       {countryElectricityGeneration && <div id="info-container" className="info-container">
         <button className="close-button" onClick={handleClose}>X</button>
         <h2>
-          Information about {selectedCountry.NAME_ENGL}
-          <Link to={`/countries/${selectedCountry.ISO3_CODE}`}>Linkki</Link>
+          Information about  <Link to={`/countries/${selectedCountry.ISO3_CODE}`}>{ selectedCountry.NAME_ENGL}</Link>
         </h2>
         <ul>
           {countryElectricityGeneration.map(country => {
