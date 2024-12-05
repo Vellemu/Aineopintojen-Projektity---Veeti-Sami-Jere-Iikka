@@ -30,7 +30,7 @@ const PieChartComponent = ({ countryCode }) => {
   useEffect(() => {
     const getGenerationData = async () => {
       const sliderValue = activeButton === "monthly" ? { year, month } : year;
-      const data = await fetchChartData(countryCode, activeButton, sliderValue);
+      const data = await fetctPieChart(countryCode, activeButton, sliderValue);
 
       const processedData = [];
       const groupedData = {};

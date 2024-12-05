@@ -18,7 +18,7 @@ const fetchCountryElectricityData = async (countryCode) => {
   return jsonData.data
 }
 
-const fetchChartData = async (countryCode, periodization, params) => {
+const fetctPieChart = async (countryCode, periodization, params) => {
   const apiKey = import.meta.env.VITE_API_KEY; /* API-avain ympäristömuuttuja */
   let startDate, endDate;
 
@@ -46,4 +46,4 @@ const fetchChartData = async (countryCode, periodization, params) => {
 }
 
 export { fetchCountryElectricityData }
-export { fetchChartData }
+export { fetctPieChart }
