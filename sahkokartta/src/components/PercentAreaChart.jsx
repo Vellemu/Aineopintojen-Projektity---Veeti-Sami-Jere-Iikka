@@ -4,9 +4,6 @@ import { fetchChartData } from '../api';
 import { useState, useEffect } from 'react';
 import { Slider } from '@mui/material';
 
-/**
- * 
- */
 const PercentAreaChart = ({countryCode}) => {
   const [chartData, setChartData] = useState(null);
   const [sliderValue, setSliderValue] = useState(2017);
@@ -203,6 +200,11 @@ const PercentAreaChart = ({countryCode}) => {
     return methods;
   } */
 
+  /**
+   * Laskee tapakohtaiset tuotantomäärien summan kaikista tarkasteltavan ajanjakson datapisteistä
+   * ja palauttaa tuotantomäärän perusteella järjestetyn generationMethods-taulukon
+   * @returns methods: [{name: string, color: string}]
+   */
   const sortMethodsByTotal = () => {
     let data = chartData;
     let totals = [];
@@ -240,11 +242,6 @@ const PercentAreaChart = ({countryCode}) => {
     return methods;
   } 
 
-  /**
-   * 
-   * @param {*} e 
-   * @param {*} year 
-   */
   const setYear = (e, year) => {
     setSliderValue(year);
   }
