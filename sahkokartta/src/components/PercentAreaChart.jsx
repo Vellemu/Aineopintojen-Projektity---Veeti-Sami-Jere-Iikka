@@ -89,21 +89,6 @@ const PercentAreaChart = ({countryCode}) => {
     }
     getGenerationData();
   },[countryCode, sliderValue, activeButton]);
-
-  /**
-   * 
-   * @param {*} e 
-   * @param {*} year 
-   */
-  const setYear = (e, year) => {
-    setSliderValue(year);
-  }
-
-  const marks = (values) => {
-    var a = [];
-    values.map((x) =>  a.push({value: x, label: x.toString()}));
-    return a;
-  };
       
   /**
    * Näyttää eri tuotantotapojen sähköntuotantomäärät 
@@ -173,7 +158,11 @@ const PercentAreaChart = ({countryCode}) => {
     const RadioButton = ({label, value, onChange}) => {
       return(
         <label>
-          <input type="radio" checked={value} onChange={onChange} />
+          <input 
+            type="radio" 
+            checked={value} 
+            onChange={onChange}
+          />
           {label}
         </label>
       )
@@ -195,12 +184,7 @@ const PercentAreaChart = ({countryCode}) => {
    )
   };
 
-  /**
-   * Järjestää datan ensimmäisen datapisteen perusteella (kuukausittaisessa kaaviossa tammikuu valitulta vuodelta, vuosittaisessa vuosi 2000) 
-   * suurimmasta tuotantotavasta pieninpään 
-   * @returns järjestetyt <Area>-elementit
-   */
-  const renderSortedData = () => {
+  /* const sortMethodsByFirstPeriod = () => {
     let methods = generationMethods.slice();
     let firstDataPoint = chartData[0];
     var v1;
@@ -216,20 +200,64 @@ const PercentAreaChart = ({countryCode}) => {
       })
       return v2-v1;
     });
-    return (
-      methods.map((method) => 
-        <Area 
-          key={method.name} 
-          type="monotone"
-          dataKey={method.name} 
-          stackId="1" 
-          stroke={method.color} 
-          fill={method.color} />)
-    ) 
+    return methods;
+  } */
+
+  const sortMethodsByTotal = () => {
+    let data = chartData;
+    let totals = [];
+    generationMethods.map((method) => {totals.push({key: method.name, value: 0})})
+    data.map((dataPoint) => { 
+      Object.entries(dataPoint).forEach(([key, value]) => {
+        switch (key) {
+          case "Bioenergy": totals[0].value += value; break;
+          case "Nuclear": totals[1].value += value; break;
+          case "Coal": totals[2].value += value; break;
+          case "Gas": totals[3].value += value; break;
+          case "Hydro":totals[4].value += value; break;
+          case "Solar": totals[5].value += value; break;
+          case "Wind":totals[6].value += value; break;
+          case "Other fossil": totals[7].value += value; break;
+          case "Other renewables": totals[8].value += value; break;
+        }
+      });
+    });
+    
+    let methods = generationMethods.slice();
+    var v1;
+    var v2;
+    methods.sort((a,b) => {
+      totals.map(({key, value}) => {
+        if(a.name === key) {
+          v1 = value;
+        } 
+        if(b.name === key) {
+          v2 = value;
+        } 
+      })
+      return v2-v1;
+    });
+    return methods;
+  } 
+
+  /**
+   * 
+   * @param {*} e 
+   * @param {*} year 
+   */
+  const setYear = (e, year) => {
+    setSliderValue(year);
   }
+
+  const marks = (values) => {
+    var a = [];
+    values.map((x) =>  a.push({value: x, label: x.toString()}));
+    return a;
+  };
 
   return (
   <>
+    <h2 className='areachart-header'> Share of each substantial electricity generation method {activeButton === "monthly" && "in " + sliderValue} </h2>
     {chartData && 
     <AreaChart width={800} height={400} className='areachart'
         data={chartData}
@@ -242,7 +270,14 @@ const PercentAreaChart = ({countryCode}) => {
         content={renderTooltipContent} 
         wrapperStyle={{ backgroundColor: "#ffffff",  paddingLeft: "5px", paddingRight: "5px", borderRadius: "25px"}} 
       />
-      {renderSortedData()}
+      {sortMethodsByTotal().map((method) => 
+        <Area 
+          key={method.name} 
+          type="monotone"
+          dataKey={method.name} 
+          stackId="1" 
+          stroke={method.color} 
+          fill={method.color} />)}
     </AreaChart>}
     
     <ul className='methodlist'>
