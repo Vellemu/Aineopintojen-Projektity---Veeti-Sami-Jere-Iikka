@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../sahkokartta.css';
 import { PieChart, Pie, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import { fetchChartData } from '../api';
+import { fetctPieChart } from '../api';
 import { Slider } from '@mui/material';
 
 const PieChartComponent = ({ countryCode }) => {
