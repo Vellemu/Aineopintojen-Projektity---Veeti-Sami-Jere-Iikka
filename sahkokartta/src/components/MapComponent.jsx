@@ -5,7 +5,7 @@ import { useCountry } from "../hooks/useCountry";
 
 const defaultCountryStyle = {
   weight: 2,
-  color: 'green',
+  color: 'lightblue',
   fillColor: 'green',
   fillOpacity: 0.5
 }
@@ -38,11 +38,11 @@ const MapComponent = () => {
     <MapContainer center={position} zoom={4} style={{ height: '100vh', width: '100%' }}>
       <TileLayer
         url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png"
-        attribution='©OpenStreetMap, ©CartoDB'
+        attribution='©OpenStreetMap, ©CartoDB, Data: ©Ember'
       />
       <TileLayer
         url="https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png"
-        attribution='©OpenStreetMap, ©CartoDB'
+        attribution='©OpenStreetMap, ©CartoDB, Data: ©Ember'
       />
       <GeoJSON
         data={geoData}

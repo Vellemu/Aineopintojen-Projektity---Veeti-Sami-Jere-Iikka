@@ -52,48 +52,94 @@
     cursor: pointer;
   }
 
-  /* Piechart komponentti Country tiedostossa*/
-  .piechart-container {
-    position: absolute; 
-    top: 50%;           
-    right: 0;            
-    transform: translateY(-50%); 
-    width: 50%;         
-  }
-  
-  .piechart-container .recharts-wrapper {
-    max-width: 100%; 
-  }
-/* Piechart komponentin sliderit */
-  .custom-slider.MuiSlider-root {
-    width: 60%;
-    height: 6px;
-    left: 20%;
-  }
-  
-  .custom-slider .MuiSlider-thumb {
-    width: 14px;
-    height: 14px;
-  }
-  
-  .custom-slider .MuiSlider-track {
-    height: 6px;
-  }
-  
-  .custom-slider .MuiSlider-rail {
-    height: 6px;
+/* PercentAreaChart.jsx */
+.areachart-container {
+  position: absolute;
+}  
+  .areachart {
+    display: inline-block;
   }
 
-  .radio-button {
-    display: flex;
-    justify-content: center; 
-    align-items: center;    
-    position: fixed;        
-    top: 90;                
-    width: 100%;            
-    padding: 10px 0;        
-    background-color: #fff; 
-    z-index: 10;            
+  .methodlist {
+    display: inline-block;
+    position: absolute;
+    top: 50px;
+    background-color: beige;
+    width: 140px;
+    height: 380px;
+    padding-left: 20px;
+    border-radius: 10px;
   }
 
+  .methodlist li {
+    list-style-type: square;
+    font-size: 20px;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-variant-caps: all-small-caps;
+  }
+
+  .radiobuttons {
+    display: inline-block;
+    position: absolute;
+    top: 300px;
+    padding-left: 20px;
+    padding-top: 20px;
+    width: 80px;
+    scale: 1.5;
+  }
+
+  .slider {
+    margin-left: 3.5%;
+    scale: 0.9;
+  }
+
+  .areachart-header {
+    margin-left: 10%;
+    font-variant-caps: all-small-caps;
+  }
+  
+
+    /* Piechart komponentti Country tiedostossa*/
+    .piechart-container {
+      position: absolute; 
+      top: 50%;           
+      right: 0;            
+      transform: translateY(-50%); 
+      width: 50%;         
+    }
+    
+    .piechart-container .recharts-wrapper {
+      max-width: 100%; 
+    }
+  /* Piechart komponentin sliderit */
+    .custom-slider.MuiSlider-root {
+      width: 60%;
+      height: 6px;
+      left: 20%;
+    }
+    
+    .custom-slider .MuiSlider-thumb {
+      width: 14px;
+      height: 14px;
+    }
+    
+    .custom-slider .MuiSlider-track {
+      height: 6px;
+    }
+    
+    .custom-slider .MuiSlider-rail {
+      height: 6px;
+    }
+  
+    .radio-button {
+      display: flex;
+      justify-content: center; 
+      align-items: center;    
+      position: fixed;        
+      top: 90;                
+      width: 100%;            
+      padding: 10px 0;        
+      background-color: #fff; 
+      z-index: 10;            
+    }
   /* App.jsx css */ 

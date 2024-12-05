@@ -1,14 +1,20 @@
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
-import MapComponent from './components/MapComponent'
-import './sahkokartta.css'
-import CountryData from './components/CountryData';
-import Country from './components/Country';
 import { useCountry } from './hooks/useCountry';
+import CountryData from './components/CountryData';
+import MapComponent from './components/MapComponent'
+import Country from './components/Country';
+import EmissionsMap from './components/EmissionsMap';
+
+import './sahkokartta.css'
 
 const App = () => {
-  const { selectedCountry } = useCountry()
+  const {
+    selectedCountry,
+    toggleMap,
+    selectedMap
+  } = useCountry()
 
   /**
    * Päivittää valitun maan tiedot
@@ -19,16 +25,20 @@ const App = () => {
     }
   }, [selectedCountry]);
 
+  const changeMap = () => {
+    toggleMap()
+  }
+
   return (
     <Router>
       <h1>Sähkökartta</h1>
+      <button onClick={changeMap}>change map</button>
       <Routes>
         <Route path='/' element={
           <>
-            <MapComponent />
-            {selectedCountry &&
-              <CountryData />
-            }
+            {selectedMap === 'energyTrade' && <MapComponent />}
+            {selectedMap === 'emissions' && <EmissionsMap />}
+            {selectedCountry && <CountryData />}
           </>
         } />
         <Route path='/countries/:countryCode' element={<Country />} />

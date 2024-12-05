@@ -1,8 +1,10 @@
 import { Link, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react';
+import { useCountry } from '../hooks/useCountry';
 import React, { PureComponent } from 'react';
 import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 import geoData from '../geoJson/CNTR_RG_60M_2020_4326.json';
+import PercentAreaChart from './PercentAreaChart';
 import { useCountry } from "../hooks/useCountry";
 import PieChartComponent from './PieChartComponent';
 
@@ -13,7 +15,7 @@ import PieChartComponent from './PieChartComponent';
 const Country = () => {
   const countryCode = useParams().countryCode.toUpperCase()
   const [country, setCountry] = useState('')
-  const { countryElectricityGeneration,getCountryData } = useCountry()
+  const { selectedCountry, countryElectricityGeneration ,getCountryData} = useCountry()
 
   useEffect(() => {
 
@@ -31,6 +33,9 @@ const Country = () => {
     }
 
     setCountry(countryName)
+
+    console.log(selectedCountry)
+    console.log(countryElectricityGeneration)
     
   }, [countryCode, getCountryData, countryElectricityGeneration])
 
@@ -43,13 +48,18 @@ const dataElectric = countryElectricityGeneration.map((item) => {
   
   return (
     <>
+      <>
     <div>
-      <h1>{country} <Link to='/'>Takaisin karttaan</Link></h1>
-    
+        <h1>{country} <Link to='/'>Takaisin karttaan</Link></h1>
+      
     </div>
     <div className="piechart-container">
       <PieChartComponent countryCode={countryCode} />
     </div>
+      <div className='areachart-container'>
+        <PercentAreaChart countryCode={countryCode} />
+      </div>
+    </>
     </>
     
   )
