@@ -52,18 +52,48 @@
 
 /* PercentAreaChart.jsx */
 .areachart-container {
-  width: 50vh;
-  height: 40vh;
-}
+  position: absolute;
+}  
   .areachart {
-    position: absolute;
-    left: 10%;
-    right: 10%;
-  }
-  .slider {
-    position: absolute;
-    left: 30%;
-    right: 10%;
+    display: inline-block;
   }
 
+  .methodlist {
+    display: inline-block;
+    position: absolute;
+    top: 50px;
+    background-color: beige;
+    width: 140px;
+    height: 380px;
+    padding-left: 20px;
+    border-radius: 10px;
+  }
+
+  .methodlist li {
+    list-style-type: square;
+    font-size: 20px;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-variant-caps: all-small-caps;
+  }
+
+  .radiobuttons {
+    display: inline-block;
+    position: absolute;
+    top: 300px;
+    padding-left: 20px;
+    padding-top: 20px;
+    width: 80px;
+    scale: 1.5;
+  }
+
+  .slider {
+    margin-left: 3.5%;
+    scale: 0.9;
+  }
+
+  .areachart-header {
+    margin-left: 10%;
+    font-variant-caps: all-small-caps;
+  }
+  
   /* App.jsx css */ 

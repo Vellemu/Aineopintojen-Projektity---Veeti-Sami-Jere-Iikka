@@ -30,7 +30,7 @@ const Country = () => {
       <div>
         <h1>{country} <Link to='/'>Takaisin karttaan</Link></h1>
       </div>
-      <div>
+      <div className='areachart-container'>
         <PercentAreaChart countryCode={countryCode} />
       </div>
     </>
