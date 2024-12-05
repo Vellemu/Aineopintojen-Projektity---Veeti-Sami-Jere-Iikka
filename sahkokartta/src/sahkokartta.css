@@ -18,9 +18,10 @@
     position:absolute;
     top: 30%;
     right: 0.5%;
-    height: 70vh;
+    height: fit-content;
     width: 20%;
     padding: 5px;
+    border-radius: 10px;
     border-right: 1px solid #ccc;
     background-color: white; 
     z-index: 1000; 
@@ -45,9 +46,54 @@
     top: -2px;
     left: -5px;
     background: none;
+    background-color: red; 
     border: solid 1px black;
     font-size: 15px;
     cursor: pointer;
+  }
+
+  /* Piechart komponentti Country tiedostossa*/
+  .piechart-container {
+    position: absolute; 
+    top: 50%;           
+    right: 0;            
+    transform: translateY(-50%); 
+    width: 50%;         
+  }
+  
+  .piechart-container .recharts-wrapper {
+    max-width: 100%; 
+  }
+/* Piechart komponentin sliderit */
+  .custom-slider.MuiSlider-root {
+    width: 60%;
+    height: 6px;
+    left: 20%;
+  }
+  
+  .custom-slider .MuiSlider-thumb {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .custom-slider .MuiSlider-track {
+    height: 6px;
+  }
+  
+  .custom-slider .MuiSlider-rail {
+    height: 6px;
+  }
+
+  .radio-button {
+    display: flex;
+    justify-content: center; 
+    align-items: center;    
+    position: fixed;        
+    top: 90;                
+    width: 100%;            
+    padding: 10px 0;        
+    background-color: #fff; 
+    z-index: 10;            
   }
 
   /* App.jsx css */ 

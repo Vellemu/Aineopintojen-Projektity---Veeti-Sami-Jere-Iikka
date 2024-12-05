@@ -1,7 +1,10 @@
 import { Link, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react';
-
+import React, { PureComponent } from 'react';
+import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 import geoData from '../geoJson/CNTR_RG_60M_2020_4326.json';
+import { useCountry } from "../hooks/useCountry";
+import PieChartComponent from './PieChartComponent';
 
 /**
  * TODO: Näyttää yhdestä maasta enemmän dataa
@@ -10,19 +13,45 @@ import geoData from '../geoJson/CNTR_RG_60M_2020_4326.json';
 const Country = () => {
   const countryCode = useParams().countryCode.toUpperCase()
   const [country, setCountry] = useState('')
+  const { countryElectricityGeneration,getCountryData } = useCountry()
 
   useEffect(() => {
+
     // TODO: Parempi tapa?
     // Haetaan maan nimi maakoodin perusteella
     const countryName = geoData.features.filter(
       feature => feature.properties.ISO3_CODE.toUpperCase() === countryCode)[0].properties.NAME_ENGL
-    setCountry(countryName)
-  }, [countryCode])
 
+      const getData = async() => {
+      await getCountryData(countryName)
+    }
+    
+    if (!countryElectricityGeneration || countryElectricityGeneration.lenght < 1){
+      getData()
+    }
+
+    setCountry(countryName)
+    
+  }, [countryCode, getCountryData, countryElectricityGeneration])
+
+const dataElectric = countryElectricityGeneration.map((item) => {
+  return {
+    name: item.series,
+    value: item.generation_twh,
+  };
+});
+  
   return (
+    <>
     <div>
       <h1>{country} <Link to='/'>Takaisin karttaan</Link></h1>
+    
     </div>
+    <div className="piechart-container">
+      <PieChartComponent countryCode={countryCode} />
+    </div>
+    </>
+    
   )
 }
 
