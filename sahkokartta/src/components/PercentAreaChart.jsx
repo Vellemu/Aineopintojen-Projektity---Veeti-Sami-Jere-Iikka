@@ -154,20 +154,23 @@ const PercentAreaChart = ({countryCode}) => {
 
     const RadioButton = ({label, value, onChange}) => {
       return(
-        <label>
-          <input 
+        <div className="radiobutton-a">
+         <label>
+          <input
             type="radio" 
             checked={value} 
             onChange={onChange}
           />
           {label}
-        </label>
+          </label>
+        </div>    
       )
     };
     
     return (
       <>
-        <RadioButton 
+        Data points
+        <RadioButton
           label="Yearly"
           value={activeButton === "yearly"}
           onChange={handleYearly}
@@ -265,7 +268,7 @@ const PercentAreaChart = ({countryCode}) => {
       <YAxis tickFormatter={(decimal) => `${decimal * 100}%`} />
       <Tooltip
         content={renderTooltipContent} 
-        wrapperStyle={{ backgroundColor: "#ffffff",  paddingLeft: "5px", paddingRight: "5px", borderRadius: "25px"}} 
+        wrapperStyle={{ backgroundColor: "#ffffff", borderRadius: "25px"}} 
       />
       {sortMethodsByTotal().map((method) => 
         <Area 
