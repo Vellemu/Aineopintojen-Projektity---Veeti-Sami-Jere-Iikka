@@ -1,0 +1,33 @@
+{
+    "2023": {
+        "Europe": {
+            "Germany": {
+                "France": 50,
+                "Poland": 30
+            },
+            "France": {
+                "Germany": 10,
+                "Spain": 20
+            }
+        },
+        "North America": {
+            "United States": {
+                "Canada": 70,
+                "Mexico": 15
+            },
+            "Canada": {
+                "USA": 25
+            }
+        },
+        "Asia": {
+            "China": {
+                "Russian Federation": 40,
+                "Kazakhstan": 10
+            },
+            "India": {
+                "Nepal": 5,
+                "Bhutan": 7
+            }
+        }
+    }
+}
