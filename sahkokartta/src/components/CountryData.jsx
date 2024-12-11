@@ -58,8 +58,15 @@ const combinedRenewablepercentage = adjustedTotalGeneration ? (combinedRenewable
     <>
       {countryElectricityGeneration && <div id="info-container" className="info-container">
         <button className="close-button" onClick={handleClose}>X</button>
-        <h2>
-          Information about  <Link to={`/countries/${selectedCountry.ISO3_CODE}`}>{ selectedCountry.NAME_ENGL}</Link>
+        <h2 style={{alignContent: "center"}}>
+          {/* {`Information about `}   */}
+          <Link
+            to={`/countries/${selectedCountry.ISO3_CODE}`}
+            title={`Opens a page with charts about energy generation in ${selectedCountry.NAME_ENGL}`}
+            >{selectedCountry.NAME_ENGL}
+            <img src={`https://flagsapi.com/${selectedCountry.CNTR_ID}/flat/64.png`} className="info-flag" style={{display: "block"}}></img>
+          </Link>
+          {` Generation by method in 2023:`} 
         </h2>
         <ul>
           {countryElectricityGeneration.map(country => {

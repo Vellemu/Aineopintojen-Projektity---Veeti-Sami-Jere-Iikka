@@ -156,20 +156,23 @@ const PercentAreaChart = ({countryCode}) => {
 
     const RadioButton = ({label, value, onChange}) => {
       return(
-        <label>
-          <input 
+        <div className="radiobutton-a">
+         <label>
+          <input
             type="radio" 
             checked={value} 
             onChange={onChange}
           />
           {label}
-        </label>
+          </label>
+        </div>    
       )
     };
     
     return (
       <>
-        <RadioButton 
+        Data points
+        <RadioButton
           label="Yearly"
           value={activeButton === "yearly"}
           onChange={handleYearly}
