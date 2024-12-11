@@ -46,16 +46,18 @@ const Country = () => {
 
   return (
     <>
-      <div>
-        <div>
-          <h1>{country} <Link to='/'>Takaisin karttaan</Link></h1>
-
-        </div>
-        <div className="piechart-container">
-          <PieChartComponent countryCode={countryCode} />
+      <div className="container">
+        <div className="header-container">
+          <h1 className="header-title">
+            {country} electricity generation
+          </h1>
+          <Link to='/' className="back-link">Back to the map view</Link>
         </div>
         <div className='areachart-container'>
            {<PercentAreaChart countryCode={countryCode} /> }
+        </div>
+        <div className="piechart-container">
+          <PieChartComponent countryCode={countryCode} />
         </div>
       </div>
     </>

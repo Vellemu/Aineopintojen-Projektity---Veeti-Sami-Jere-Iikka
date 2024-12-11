@@ -3,6 +3,8 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts'
 import { fetchChartData } from '../api';
 import { useState, useEffect } from 'react';
 import { Slider } from '@mui/material';
+import '../sahkokartta.css';
+
 
 const PercentAreaChart = ({countryCode}) => {
   const [chartData, setChartData] = useState(null);
@@ -253,56 +255,90 @@ const PercentAreaChart = ({countryCode}) => {
   };
 
   return (
-  <>
-    <h2 className='areachart-header'> Share of each substantial electricity generation method {activeButton === "monthly" && "in " + sliderValue} </h2>
-    {chartData && 
-    <AreaChart width={800} height={400} className='areachart'
-        data={chartData}
-        stackOffset='expand'
-    >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="period" />
-      <YAxis tickFormatter={(decimal) => `${decimal * 100}%`} />
-      <Tooltip
-        content={renderTooltipContent} 
-        wrapperStyle={{ backgroundColor: "#ffffff",  paddingLeft: "5px", paddingRight: "5px", borderRadius: "25px"}} 
-      />
-      {sortMethodsByTotal().map((method) => 
-        <Area 
-          key={method.name} 
-          type="monotone"
-          dataKey={method.name} 
-          stackId="1" 
-          stroke={method.color} 
-          fill={method.color} />)}
-    </AreaChart>}
-    
-    <ul className='methodlist'>
-      {generationMethods.map((method) => 
-      <li 
-        key={method.name} 
-        style={{color: method.color}}
-      >{method.name}
-      </li>)}
-    </ul>
-    
-    <div className='radiobuttons'>
-    <RadioButtons
-      activeButton={activeButton} 
-      setActiveButton={setActiveButton}/>
+    <>
+    <div className="main-container">
+      <div className="content-container">
+  
+        {/* AreaChart Section */}
+        <div className="areachart-container">
+          <h2 className="areachart-header">
+            Share of each substantial electricity generation method 
+            {activeButton === "monthly" && ` in ${sliderValue}`}
+          </h2>
+  
+          {chartData && (
+            <AreaChart 
+              width={800} 
+              height={400} 
+              className="areachart"
+              data={chartData}
+              stackOffset="expand"
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="period" stroke="#000"/>
+              <YAxis tickFormatter={(decimal) => `${decimal * 100}%`} stroke="#000"/>
+              <Tooltip
+                content={renderTooltipContent} 
+                wrapperStyle={{
+                  backgroundColor: "#ffffff",  
+                  paddingLeft: "5px", 
+                  paddingRight: "5px", 
+                  borderRadius: "25px"
+                }} 
+              />
+              {sortMethodsByTotal().map((method) => (
+                <Area 
+                  key={method.name} 
+                  type="monotone"
+                  dataKey={method.name} 
+                  stackId="1" 
+                  stroke={method.color} 
+                  fill={method.color} 
+                />
+              ))}
+            </AreaChart>
+          )}
+        </div>
+  
+        {/* Right Panel Section */}
+        <div className="right-panel">
+          <ul className="methodlist">
+            {generationMethods.map((method) => (
+              <li 
+                key={method.name} 
+                style={{ color: method.color }}
+              >
+                {method.name}
+              </li>
+            ))}
+          </ul>
+  
+          <div className="radiobuttons">
+            <RadioButtons
+              activeButton={activeButton} 
+              setActiveButton={setActiveButton}
+            />
+          </div>
+        </div>
+      </div>
+  
+      {/* Slider Section */}
+      {activeButton === "monthly" && (
+        <Slider 
+          className="slider"
+          style={{ width: '70%', margin: '0 auto' }}
+          step={null}
+          marks={marks(monthlyDataYears)}
+          defaultValue={2017}
+          min={2017}
+          max={2024}
+          valueLabelDisplay="auto"
+          onChange={setYear}
+        />
+      )}
     </div>
-    
-    {activeButton === "monthly" && 
-    <Slider className='slider'
-      step={null}
-      marks={marks(monthlyDataYears)}
-      defaultValue={2017}
-      min={2017}
-      max={2024}
-      valueLabelDisplay="auto"
-      onChange={setYear}
-    />}  
-  </>    
+  </>
+     
   )  
 }
 export default PercentAreaChart
