@@ -64,7 +64,6 @@ const onEachCountry = (country, layer, setSelectedCountry, getCountryData, setAr
 const getCoordinates = (countryName) => {
   const feature = geoData.features.find( f => f.properties.NAME_ENGL === countryName);
   if (feature) {
-    // Ensure we correctly extract the latitude and longitude
     const center = turf.centroid(feature);
     const [lng, lat] = center.geometry.coordinates;
     console.log(`Coordinates for ${countryName}:`, { lat, lng });

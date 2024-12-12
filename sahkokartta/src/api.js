@@ -101,14 +101,6 @@ const fetchChartData = async (countryCode, periodization, year) => {
   return jsonData.data
 }
 
-const fetchImportData = async () => {
-  const response = await fetch(`https://api.ember-climate.org/v1/electricity-imports/annual?is_aggregate_entity=false&start_date=2023&end_date=2023&api_key=${apiKey}`);
-  const jsonData = await response.json()
-  return jsonData.data
-}
-
 export { fetchCountryElectricityData, fetchChartData, fetchEmissionsData, fetchClean, fetchRenewables }
 
 export { fetctPieChart }
-
-export { fetchImportData }

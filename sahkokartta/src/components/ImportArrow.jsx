@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useMap } from 'react-leaflet';
 import L from 'leaflet';
 import '@elfalem/leaflet-curve'
-
+// Piirtää nuolet klikatusta maasta jokaiseen maahan josta klikattu maa tuo sähköä. Data Electricity_Imports.json kansiosta, minkä sisältä on täältä https://wits.worldbank.org/trade/comtrade/en/country/SWE/year/2023/tradeflow/Imports/partner/ALL/product/271600
 const ImportArrow = ({ from, to, value }) => {
   const map = useMap();
 
@@ -62,7 +62,7 @@ const ImportArrow = ({ from, to, value }) => {
     };
   }, [map, from, to, value]);
 
-  return null; // No JSX to render since the curve is added to the map directly
+  return null;
 };
 
 export default ImportArrow;
