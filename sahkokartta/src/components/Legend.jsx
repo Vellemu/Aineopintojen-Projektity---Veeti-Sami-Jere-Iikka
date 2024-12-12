@@ -6,7 +6,7 @@ import { useCountry } from "../hooks/useCountry"
 
 const percentageLegend = () => {
   const div = L.DomUtil.create('div', 'info legend')
-  const grades = [80, 60, 40, 20, 0]
+  const grades = [0, 20, 40, 60, 80]
 
   grades.forEach((grade, i) => {
     const colorBox = L.DomUtil.create('i', 'colorBox', div)

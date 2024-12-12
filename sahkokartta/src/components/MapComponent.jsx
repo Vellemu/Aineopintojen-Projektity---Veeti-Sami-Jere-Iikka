@@ -1,4 +1,4 @@
-import React, { useState,  useEffect } from 'react';
+import { useState } from 'react';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import geoData from '../geoJson/CNTR_RG_60M_2020_4326.json';
 import '../sahkokartta.css';
@@ -103,7 +103,7 @@ const MapComponent = () => {
     };
   };
   return (
-    <MapContainer center={position} zoom={4} style={{ height: '100vh', width: '100%' }}>
+    <MapContainer center={position} zoom={4} style={{ height: '90vh', width: '100%' }}>
       <TileLayer
         noWrap
         url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png"

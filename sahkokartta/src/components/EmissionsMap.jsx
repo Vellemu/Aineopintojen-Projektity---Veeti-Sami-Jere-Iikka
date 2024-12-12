@@ -21,7 +21,7 @@ const EmissionsMap = () => {
 
   return (
     <div>
-      <MapContainer center={position} zoom={4} style={{ height: '100vh', width: '100%' }}>
+      <MapContainer center={position} zoom={4} style={{ height: '90vh', width: '100%' }}>
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png"
           attribution='©OpenStreetMap, ©CartoDB'
@@ -30,7 +30,7 @@ const EmissionsMap = () => {
           url="https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png"
           attribution='©OpenStreetMap, ©CartoDB'
         />
-        <Layers energyData={data}/>
+        <Layers energyData={data} />
         <Legend />
       </MapContainer>
     </div>
